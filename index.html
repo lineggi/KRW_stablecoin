@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>원화 스테이블코인 시뮬레이터 — 어디에 어떻게 쓰일까</title>
+<meta name="description" content="원화 스테이블코인(KRWT)이 개인 일상·기업/가맹점·글로벌 송금에서 실제로 어떻게 쓰이는지, 기존 방식과 무엇이 다른지 장면으로 따라가는 인터랙티브 시뮬레이터.">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.3.9/static/pretendard.css">
+<style>
+  :root{
+    --paper:#EEF2F0; --ink:#11201C; --ink-soft:#566661; --ink-faint:#8A968F;
+    --line:#DBE3DF; --card:#FFFFFF;
+    --jade:#0E9F6E; --jade-deep:#0A6E4C; --jade-tint:#E3F4EC;
+    --gold:#B0822F; --gold-tint:#F3E9D2; --con:#C2553F; --con-tint:#FBE9E4;
+    --blue:#2B5AA0; --blue-tint:#E6EDF7;
+    --radius:18px; --shadow:0 22px 55px -24px rgba(17,32,28,.5);
+    --f:'Pretendard',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--f);background:radial-gradient(120% 80% at 50% -10%,#F7FAF8 0%,var(--paper) 55%) fixed;
+    color:var(--ink);-webkit-font-smoothing:antialiased;display:flex;justify-content:center;
+    padding:24px 16px 40px;line-height:1.5}
+  .stage{width:100%;max-width:412px}
+  .num{font-variant-numeric:tabular-nums}
+
+  .eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--jade-deep);
+    background:var(--jade-tint);padding:6px 11px;border-radius:999px}
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--jade);box-shadow:0 0 0 3px rgba(14,159,110,.18)}
+  h1{font-size:23px;font-weight:800;letter-spacing:-.02em;margin:12px 0 6px;line-height:1.25}
+  h1 b{color:var(--jade-deep)}
+  .sub{font-size:13px;color:var(--ink-soft);max-width:40ch}
+
+  /* HUB */
+  .hub{margin-top:16px;display:grid;gap:11px}
+  .mode{display:flex;align-items:center;gap:13px;text-align:left;width:100%;cursor:pointer;
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:15px 15px;
+    font-family:inherit;box-shadow:0 14px 32px -26px rgba(17,32,28,.5);transition:transform .14s,border-color .2s,box-shadow .2s}
+  .mode:hover{transform:translateY(-2px);border-color:var(--jade);box-shadow:0 20px 40px -24px rgba(14,159,110,.4)}
+  .mode:focus-visible{outline:3px solid var(--jade-tint);outline-offset:2px}
+  .mode .mIcon{flex:0 0 auto;width:48px;height:48px;border-radius:14px;display:flex;align-items:center;
+    justify-content:center;font-size:24px;background:var(--jade-tint)}
+  .mode.biz .mIcon{background:var(--gold-tint)} .mode.glob .mIcon{background:var(--blue-tint)}
+  .mode .mBody{flex:1;min-width:0}
+  .mode .mTitle{font-size:15.5px;font-weight:800;letter-spacing:-.01em}
+  .mode .mDesc{font-size:12px;color:var(--ink-soft);margin-top:2px;line-height:1.45}
+  .mode .mTags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+  .mode .mTag{font-size:10px;font-weight:700;color:var(--ink-faint);background:#EEF2F0;border-radius:6px;padding:2px 7px}
+  .mode .mArrow{flex:0 0 auto;color:var(--ink-faint);font-size:18px;font-weight:800}
+
+  .hubNote{font-size:12px;color:var(--ink-faint);margin-top:13px;text-align:center;line-height:1.5}
+
+  /* device */
+  .device{margin-top:16px;border-radius:30px;background:var(--card);box-shadow:var(--shadow);
+    border:1px solid var(--line);overflow:hidden}
+  .top{padding:16px 18px 14px;color:#EAF4EF;position:relative;transition:background .6s}
+  .top .row{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}
+  .time{font-size:12px;font-weight:700;letter-spacing:.02em;opacity:.9}
+  .sky{font-size:18px}
+  .modeChip{position:absolute;top:14px;left:18px;z-index:2;font-size:10px;font-weight:800;letter-spacing:.04em;
+    background:rgba(255,255,255,.18);color:#fff;padding:4px 9px;border-radius:999px;backdrop-filter:blur(4px)}
+  .toHub{position:absolute;top:12px;right:14px;z-index:2;border:none;background:rgba(255,255,255,.16);color:#fff;
+    font-family:inherit;font-size:11px;font-weight:700;border-radius:999px;padding:5px 11px;cursor:pointer;transition:.16s}
+  .toHub:hover{background:rgba(255,255,255,.3)}
+  .toHub:focus-visible{outline:2px solid #fff;outline-offset:1px}
+  .bWrap{margin-top:26px;position:relative;z-index:1}
+  .bLab{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.7;font-weight:700}
+  .bal{font-size:32px;font-weight:800;letter-spacing:-.01em;margin-top:2px}
+  .bal .u{font-size:13px;opacity:.8;font-weight:700;margin-left:5px}
+  .progress{display:flex;gap:5px;margin-top:14px;position:relative;z-index:1}
+  .progress .seg{flex:1;height:4px;border-radius:3px;background:rgba(255,255,255,.25);overflow:hidden}
+  .progress .seg.done{background:rgba(255,255,255,.85)}
+  .progress .seg.cur::after{content:"";display:block;height:100%;width:55%;background:rgba(255,255,255,.85)}
+
+  /* scene */
+  .scene{padding:20px 18px 8px}
+  .sIcon{font-size:34px;line-height:1}
+  .sTitle{font-size:18px;font-weight:800;margin-top:8px}
+  .sCtx{font-size:13px;color:var(--ink-soft);margin-top:3px}
+
+  .effect{height:50px;margin:14px 0 2px;display:flex;align-items:center;justify-content:center;
+    font-size:13px;color:var(--ink-soft);font-weight:600;text-align:center;line-height:1.4;position:relative}
+  .effect .chk{width:30px;height:30px;border-radius:50%;background:var(--jade);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:16px;margin-right:8px;
+    opacity:0;transform:scale(.4);transition:.4s}
+  .effect.go .chk{opacity:1;transform:scale(1)}
+  .floatAmt{position:absolute;font-weight:800;font-size:16px;opacity:0;font-variant-numeric:tabular-nums}
+  .effect.go .floatAmt{animation:floaty 1s ease forwards}
+  @keyframes floaty{0%{opacity:0;transform:translateY(8px)}30%{opacity:1}100%{opacity:0;transform:translateY(-20px)}}
+
+  .benefit{display:none;margin-top:6px}
+  .benefit.show{display:block;animation:fade .4s ease}
+  .happen{font-size:13px;color:var(--jade-deep);font-weight:600;text-align:center;margin-bottom:11px}
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .vsBox{border-radius:13px;padding:11px 13px}
+  .vsBox.old{background:var(--con-tint);border:1px solid #F2D3CA}
+  .vsBox.neu{background:var(--jade-tint);border:1px solid #C6E6D6}
+  .vsBox .k{font-size:10px;font-weight:800;letter-spacing:.02em}
+  .vsBox.old .k{color:var(--con)} .vsBox.neu .k{color:var(--jade-deep)}
+  .vsBox .v{font-size:12px;margin-top:4px;line-height:1.45;font-weight:600}
+  .vsBox.old .v{color:#5A332B} .vsBox.neu .v{color:#234A3C}
+  @keyframes fade{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+
+  .act{width:100%;margin:16px 0 4px;border:none;border-radius:14px;padding:15px;font-family:inherit;
+    font-size:15px;font-weight:700;color:#fff;background:var(--jade);cursor:pointer;
+    transition:transform .12s,background .2s;box-shadow:0 12px 24px -12px rgba(14,159,110,.6)}
+  .act:hover{background:var(--jade-deep)}.act:active{transform:translateY(1px)}
+  .act:focus-visible{outline:3px solid var(--jade-tint);outline-offset:2px}
+  .act.next{background:var(--ink)}.act.next:hover{background:#000}
+  .act.gold{background:var(--gold)}.act.gold:hover{background:#8A6320}
+
+  /* QR / 스캔 장면 */
+  .qrStage{height:118px;margin:14px 0 4px;position:relative;display:flex;align-items:center;
+    justify-content:space-around;padding:0 4px}
+  .counter{display:flex;flex-direction:column;align-items:center;gap:6px}
+  .qrPlate{width:78px;height:78px;border-radius:12px;background:#fff;border:2px solid var(--ink);
+    padding:7px;position:relative;overflow:hidden;box-shadow:0 6px 14px -8px rgba(17,32,28,.4)}
+  .qrGrid{display:grid;grid-template-columns:repeat(7,1fr);grid-template-rows:repeat(7,1fr);gap:1px;width:100%;height:100%}
+  .qrGrid i{border-radius:1px}
+  .qrGrid i.on{background:var(--ink)}
+  .scanline{position:absolute;left:5px;right:5px;height:3px;background:var(--jade);
+    box-shadow:0 0 8px var(--jade);top:6px;opacity:0;border-radius:2px}
+  .qrStage.scan .scanline{animation:scan 1s ease-in-out}
+  @keyframes scan{0%{top:6px;opacity:0}12%{opacity:1}88%{opacity:1}100%{top:66px;opacity:0}}
+  .qrDone{position:absolute;inset:0;background:rgba(14,159,110,.94);color:#fff;display:flex;
+    align-items:center;justify-content:center;font-size:30px;opacity:0;transition:opacity .3s;border-radius:9px}
+  .qrStage.done .qrDone{opacity:1}
+  .cLabel{font-size:10.5px;color:var(--ink-faint);font-weight:700}
+  .phone{width:56px;height:100px;border-radius:14px;background:#11201C;border:2px solid #0A1B16;padding:5px;
+    display:flex;transition:transform .7s cubic-bezier(.4,0,.2,1)}
+  .phone .pScreen{background:linear-gradient(160deg,#10362B,#0A6E4C);border-radius:9px;width:100%;height:100%;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;color:#EAF4EF}
+  .pAmt{font-size:13px;font-weight:800}
+  .pLab{font-size:8px;opacity:.85;margin-top:2px}
+  .qrStage.scan .phone{transform:translateX(-44px)}
+
+  /* 일괄 송금(팬아웃) 장면 */
+  .fanStage{height:118px;margin:14px 0 4px;position:relative;display:flex;align-items:center;justify-content:center}
+  .fanHub{width:54px;height:54px;border-radius:14px;background:linear-gradient(160deg,#10362B,#0A6E4C);color:#EAF4EF;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2;box-shadow:0 8px 18px -10px rgba(10,110,76,.7)}
+  .fanHub .fa{font-size:11px;font-weight:800}.fanHub .fl{font-size:7.5px;opacity:.85}
+  .fanDots{position:absolute;inset:0}
+  .fanDot{position:absolute;top:50%;left:50%;width:11px;height:11px;border-radius:50%;background:var(--jade);
+    box-shadow:0 0 6px rgba(14,159,110,.5);transform:translate(-50%,-50%);opacity:0;
+    transition:transform .6s cubic-bezier(.4,0,.2,1),opacity .25s}
+  .fanStage.go .fanDot{opacity:1;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y)))}
+  .fanRecv{position:absolute;width:24px;height:24px;border-radius:7px;background:var(--jade-tint);
+    border:1px solid #C6E6D6;display:flex;align-items:center;justify-content:center;font-size:12px;
+    transform:scale(0);transition:transform .3s}
+  .fanStage.done .fanRecv{transform:scale(1)}
+
+  .backend{margin-top:6px;display:none}
+  .backend.show{display:block;animation:fade .4s ease}
+  .bHead{font-size:10.5px;font-weight:800;letter-spacing:.06em;color:var(--ink-faint);
+    text-transform:uppercase;margin-bottom:8px;text-align:center}
+  .bSteps{list-style:none}
+  .bPhase{font-size:10.5px;font-weight:800;color:var(--jade-deep);background:var(--jade-tint);
+    border-radius:7px;padding:5px 9px;margin:9px 0 5px;letter-spacing:.01em}
+  .bPhase:first-child{margin-top:0}
+  .bStep .ba{display:inline-block;font-size:9px;font-weight:800;color:var(--ink-faint);
+    background:#EEF2F0;border-radius:5px;padding:1px 5px;margin-right:5px;vertical-align:1px}
+  .topVs{margin-top:14px}
+  .happenTop{margin:11px 0 2px}
+  .reveal{display:none;width:100%;margin-top:13px;background:#fff;border:1.5px solid var(--line);
+    border-radius:12px;padding:12px;font-family:inherit;font-size:13px;font-weight:700;color:var(--jade-deep);
+    cursor:pointer;transition:.16s}
+  .reveal.on{display:block}
+  .reveal:hover{border-color:var(--jade);background:#F6FBF8}
+  .reveal:focus-visible{outline:3px solid var(--jade-tint);outline-offset:2px}
+  .bStep{display:flex;gap:10px;align-items:flex-start;padding:6px 2px;opacity:0;transform:translateX(-6px);transition:.4s}
+  .bStep.in{opacity:1;transform:none}
+  .bStep .bn{flex:0 0 auto;width:20px;height:20px;border-radius:50%;background:var(--jade-tint);
+    color:var(--jade-deep);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .bStep.in .bn{background:var(--jade);color:#fff}
+  .bStep .bt{font-size:12.5px;font-weight:700}
+  .bStep .bd{font-size:11px;color:var(--ink-soft);margin-top:1px;line-height:1.4}
+
+  .foot{padding:4px 18px 18px}
+  .restart{display:block;width:100%;background:none;border:none;font-family:inherit;font-size:12px;
+    color:var(--ink-faint);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:3px;padding:6px}
+
+  /* summary */
+  .sum{padding:20px 18px}
+  .sum h2{font-size:19px;font-weight:800}
+  .sum .grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
+  .scard{background:#F6F9F7;border:1px solid var(--line);border-radius:13px;padding:13px}
+  .scard .k{font-size:10.5px;color:var(--ink-faint);font-weight:700}
+  .scard .v{font-size:18px;font-weight:800;margin-top:3px}
+  .scard .v.j{color:var(--jade-deep)}
+  .sumNote{font-size:12.5px;color:var(--ink-soft);margin-top:13px;line-height:1.55}
+  .sumBtns{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}
+  .sumBtns .act{margin:0}
+
+  .frame{margin-top:15px;border-radius:var(--radius);background:#11201C;color:#CFE0D8;padding:15px 17px}
+  .frame .lab{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#5BE0A8;font-weight:700}
+  .frame p{font-size:12px;margin-top:6px;line-height:1.55;color:#BACFC6}
+  .frame b{color:#fff}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <span class="eyebrow"><span class="dot"></span>원화 스테이블코인 · 활용 시뮬레이터</span>
+  <h1>원화 스테이블코인은 <b>어디에 어떻게</b> 쓰일까</h1>
+  <p class="sub">개인의 하루부터 기업 정산, 국경을 넘는 송금까지 — KRWT가 실제로 어떻게 쓰일지 장면으로 따라가 보세요. 매 장면마다 기존 방식과 뭐가 다른지, 뒤에선 무슨 일이 일어나는지 보입니다.</p>
+
+  <div id="root"></div>
+
+  <div class="frame">
+    <div class="lab">왜 이게 내 일인가</div>
+    <p>발행 주체가 은행이든 누구든, 사람들이 KRWT를 <b>이렇게 자연스럽게 쓰게 만드는 경험</b> — 결제·송금·정산·해외·구독·어닝 — 을 설계하는 게 지갑 PM의 일입니다. USDT로 4.5년 해온 바로 그 자리.</p>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var $=function(id){return document.getElementById(id);};
+  var fmt=function(n){return Math.round(n).toLocaleString('ko-KR');};
+
+  var SKY={
+    morning:'linear-gradient(165deg,#E8923D,#C76B2E)',
+    noon:'linear-gradient(165deg,#1F8FB0,#0F6E8C)',
+    afternoon:'linear-gradient(165deg,#3D7BC7,#2B5AA0)',
+    evening:'linear-gradient(165deg,#7A4FD6,#4E2E96)',
+    night:'linear-gradient(165deg,#16312A,#0A1B16)',
+    biz:'linear-gradient(165deg,#1C5C4A,#0A6E4C)',
+    glob:'linear-gradient(165deg,#2B5AA0,#163B73)',
+    summary:'linear-gradient(165deg,#0C2A22,#0A6E4C)'
+  };
+
+  /* ---------- 모드별 시나리오 데이터 ---------- */
+  var MODES={
+    personal:{
+      label:'개인 일상', icon:'🧑', chip:'B2C · 개인',
+      walletLabel:'내 KRWT 지갑', startBal:300000, replayLabel:'다시 하루 살아보기',
+      summaryTitle:'오늘, KRWT로 보낸 하루',
+      scenes:[
+        {time:'오전 8:10', sky:'🌅', band:'morning', icon:'☕', title:'아침, 동네 카페',
+          ctx:'출근길 라떼 한 잔. 핸드폰으로 카페 QR을 찍습니다.', delta:-4500, act:'QR 코드 스캔', type:'qr',
+          phones:'₩4,500', phoneLab:'KRWT 결제',
+          phases:[
+            {h:'단계 1 · 실시간 결제 & 즉시 정산', steps:[
+              {a:'사용자→앱', t:'QR 스캔·결제 승인', d:'지갑이 가맹점 주소·금액(₩4,500)을 읽고 사용자가 승인'},
+              {a:'앱→블록체인', t:'KRWT 전송 실행', d:'사용자 지갑 → 가맹점 지갑 · 가스는 앱이 대납(가스리스)'},
+              {a:'블록체인', t:'소유권 이전·기록', d:'카운터 속도 위해 제출 즉시 낙관적 승인, 온체인 확정은 수 초 내'},
+              {a:'앱→사용자', t:'"결제 완료" 알림', d:'사용자 화면엔 즉시 완료 표시'},
+              {a:'체인→포털', t:'입금 이벤트(웹훅)', d:'정산 포털 수신 → 사장님에게 "매출 입금(KRWT)" 알림'}
+            ]},
+            {h:'단계 2 · 가맹점 원화 환매 (선택 · 보통 일 배치)', steps:[
+              {a:'가맹점→포털', t:'원화 환매 신청', d:'건별 즉시 or 일 단위로 묶어서 신청 (안 바꾸고 보유도 가능)'},
+              {a:'포털→발행사', t:'KRWT 소각 요청', d:'소각 권한은 발행사(은행) · 가맹점 코인이 소멸'},
+              {a:'발행 은행→가맹점', t:'원화 이체', d:'예치된 준비자산 → 가맹점 계좌(오픈뱅킹 API) · AML 점검'},
+              {a:'포털→가맹점', t:'"원화 입금 완료"', d:'등록 계좌로 입금 완료 알림'}
+            ]}
+          ],
+          happen:'겉은 QR 한 번 — 뒤에선 ① 온체인 즉시 결제 ② 가맹점 원화 환매, 2단계로 돕니다',
+          old:{k:'기존 카드', v:'사장님은 2~3일 뒤 정산 + 카드 수수료'},
+          neu:{k:'KRWT', v:'온체인 즉시 정산 · 환매도 가맹점 선택'}, save:0},
+        {time:'오후 12:30', sky:'🌤️', band:'noon', icon:'🍜', title:'점심, 더치페이',
+          ctx:'동료 몫까지 내가 냈고, 바로 정산받기.', delta:+12000, act:'친구가 보내기 → ₩12,000 받기',
+          happen:'친구가 탭 한 번. 1초 만에 내 지갑으로',
+          old:{k:'기존 이체', v:'은행 앱·타행 시간·이체 한도'},
+          neu:{k:'KRWT', v:'1초 · 24시간 · 앱 안에서 바로'}, save:0},
+        {time:'오후 3:00', sky:'🛍️', band:'afternoon', icon:'🛒', title:'오후, 해외 직구',
+          ctx:'미국 쇼핑몰에서 $30 결제.', delta:-41400, act:'$30 결제 (환율 고정 ₩1,380)',
+          happen:'KRWT가 즉시 USD로 환전돼 결제 · 환율은 결제 순간 고정',
+          old:{k:'기존 카드', v:'환전+해외수수료 약 3.5% (≈₩1,450)'},
+          neu:{k:'KRWT', v:'스프레드 절반 (≈₩410) · 환전소 불필요'}, save:1040},
+        {time:'오후 7:00', sky:'🌆', band:'evening', icon:'📺', title:'저녁, 구독료',
+          ctx:'스트리밍 정기결제 ₩9,900.', delta:-9900, act:'자동결제 ₩9,900',
+          happen:'잔액에서 자동 결제 · 프로그래머블이라 조건·한도도 설정 가능',
+          old:{k:'기존 카드', v:'카드 만료·갱신 실패로 끊김 리스크'},
+          neu:{k:'KRWT', v:'잔액 기반 자동 · 영수증 투명'}, save:0},
+        {time:'밤 11:00', sky:'🌙', band:'night', icon:'🌙', title:'밤, 남은 잔액',
+          ctx:'오늘 안 쓴 잔액은 그냥 두기만.', delta:0, earn:true, act:'어닝 켜기',
+          happen:'유휴 잔액에 리워드 적립 (이자가 아니라 리워드형)',
+          old:{k:'기존 통장', v:'수시입출금 이자 0%대'},
+          neu:{k:'KRWT', v:'두기만 해도 리워드가 쌓임'}, save:0}
+      ]
+    },
+
+    business:{
+      label:'기업·가맹점', icon:'🏪', chip:'B2B · 사업자',
+      walletLabel:'우리 가게/회사 지갑', startBal:5000000, replayLabel:'다시 운영해보기',
+      summaryTitle:'오늘, KRWT로 돌린 비즈니스',
+      scenes:[
+        {time:'마감 정산', sky:'🧾', band:'biz', icon:'🏪', title:'가맹점 실시간 매출 정산',
+          ctx:'하루 동안 손님들이 KRWT로 결제한 매출이 들어옵니다.', delta:+1250000, act:'오늘 매출 정산하기', type:'qr',
+          phones:'₩1,250,000', phoneLab:'당일 매출',
+          phases:[
+            {h:'단계 1 · 결제 수신 (건별 실시간)', steps:[
+              {a:'손님→가맹점', t:'KRWT 결제 누적', d:'결제 건마다 가맹점 지갑으로 즉시 입금 · 마감 시점엔 이미 다 들어와 있음'},
+              {a:'체인→포털', t:'입금 이벤트 집계', d:'정산 포털이 건별 웹훅을 모아 일 매출·정산 리포트 자동 생성'}
+            ]},
+            {h:'단계 2 · 원화 환매 (필요한 만큼만)', steps:[
+              {a:'가맹점→포털', t:'환매 금액 지정', d:'운영비만 원화로 빼고 나머지는 KRWT로 보유 (현금흐름 자유)'},
+              {a:'포털→발행사', t:'KRWT 소각·원화 이체', d:'발행 은행이 준비자산에서 등록 계좌로 즉시 이체 · AML 점검'},
+              {a:'포털→가맹점', t:'정산 완료·세금계산 데이터', d:'입금 알림 + 회계/부가세 데이터로 바로 연계'}
+            ]}
+          ],
+          happen:'카드처럼 2~3일 기다릴 필요 없이, 마감 순간 이미 자금이 손에 있습니다',
+          old:{k:'기존 카드 정산', v:'T+2~3일 · 카드 수수료 2~3% · PG 차감'},
+          neu:{k:'KRWT', v:'건별 즉시 입금 · 필요한 만큼만 원화 환매'}, save:31000},
+        {time:'급여일', sky:'💸', band:'biz', icon:'👥', title:'직원 24명 급여 일괄 지급',
+          ctx:'월급날. 클릭 한 번으로 전 직원에게 동시 지급.', delta:-3200000, act:'24명에게 일괄 지급', type:'fan',
+          fanCount:12, fanTop:'24', fanLabel:'명에게 동시',
+          happen:'24건이 동시에 나가 1분 내 전원 입금 · 가스는 회사가 대납(직원은 그대로 받음)',
+          old:{k:'기존 이체', v:'은행 영업시간·건별 한도·타행 지연·이체 수수료'},
+          neu:{k:'KRWT', v:'24시간 · 일괄 멀티전송 · 즉시 도착 · 명세 온체인 투명'}, save:12000},
+        {time:'정산일', sky:'📦', band:'biz', icon:'🤝', title:'공급사 대금 + 조건부 에스크로',
+          ctx:'납품 받은 원재료 대금. 단, 검수 통과 시에만 지급.', delta:-1500000, act:'에스크로 결제 실행',
+          happen:'대금을 스마트컨트랙트에 잠그고, 납품 검수가 확인되면 자동 릴리즈',
+          old:{k:'기존 방식', v:'선입금 후 분쟁 or 외상·어음 · 신뢰 비용'},
+          neu:{k:'KRWT', v:'조건부 에스크로 · 검수 충족 시 자동 지급 · 분쟁 감소'}, save:0},
+        {time:'장 마감', sky:'🏦', band:'biz', icon:'💼', title:'유휴 운전자금 운용',
+          ctx:'다음 매입 전까지 놀고 있는 운전자금.', delta:0, earn:true, earnRate:0.04, act:'트레저리 어닝 켜기',
+          happen:'유휴 잔액에 리워드 적립 · 필요하면 즉시 인출(락업 없음)',
+          old:{k:'기존 법인 통장', v:'수시입출금 사실상 0% · 자금 그냥 잠김'},
+          neu:{k:'KRWT', v:'유동성 유지하면서 리워드 · 현금흐름 효율'}, save:0}
+      ]
+    },
+
+    global:{
+      label:'글로벌 송금·무역', icon:'🌏', chip:'Cross-border',
+      walletLabel:'KRWT 지갑 (글로벌)', startBal:15000000, replayLabel:'다시 보내보기',
+      summaryTitle:'오늘, 국경을 넘은 KRWT',
+      scenes:[
+        {time:'해외 송금', sky:'✈️', band:'glob', icon:'👨‍👩‍👧', title:'해외 가족에게 송금',
+          ctx:'유학 중인 가족에게 생활비 ₩1,380,000 송금.', delta:-1380000, act:'해외 송금 보내기', type:'fan',
+          fanCount:6, fanTop:'✈️', fanLabel:'국경 너머로',
+          phases:[
+            {h:'단계 1 · 송금 (앱 안에서 끝)', steps:[
+              {a:'사용자→앱', t:'수취 지갑·금액 지정', d:'은행 SWIFT 코드·중개은행 입력 없이 지갑 주소(or 연락처)로 지정'},
+              {a:'앱→블록체인', t:'KRWT 전송', d:'국경 개념 없이 글로벌 동일 네트워크로 즉시 전송 · 주말·심야 무관'}
+            ]},
+            {h:'단계 2 · 현지 수령 (선택)', steps:[
+              {a:'수취인', t:'KRWT 보유 or 현지통화 환전', d:'그대로 보유하거나, 현지 파트너/거래소에서 현지통화로 오프램프'},
+              {a:'규제', t:'AML/CFT·여행규칙', d:'송수신 VASP가 신원·한도 점검 (Travel Rule) · 규제 준수 위에서 동작'}
+            ]}
+          ],
+          happen:'SWIFT 2~3일·중개은행 수수료 대신, 1분 내 도착 · 수수료는 한 자릿수 천원대',
+          old:{k:'기존 해외송금', v:'2~3 영업일 · 송금+중개+수취 수수료 ≈₩45,000 · 영업시간'},
+          neu:{k:'KRWT', v:'1분 내 · 수수료 ≈₩2,000 · 24시간 · 추적 투명'}, save:43000},
+        {time:'무역 결제', sky:'🚢', band:'glob', icon:'📑', title:'수입 대금 결제 (무역)',
+          ctx:'해외 공급사에 수입 대금 $10,000(≈₩13,800,000) 결제.', delta:-13800000, act:'무역 대금 결제 (에스크로)',
+          happen:'선적서류 확인을 조건으로 스마트컨트랙트 에스크로 · 신용장(L/C) 절차를 코드로 압축',
+          old:{k:'기존 L/C', v:'개설 수수료·서류 왕복·수일~수주 · 은행 다단계'},
+          neu:{k:'KRWT', v:'조건부 에스크로 · 서류 충족 시 자동 결제 · 비용·기간 압축'}, save:0},
+        {time:'환 관리', sky:'📈', band:'glob', icon:'🛡️', title:'환율 고정 & 정산',
+          ctx:'결제 시점 환율을 고정해 환변동 위험 제거.', delta:0, act:'환율 고정 확인',
+          happen:'결제 순간 환율을 락 · 원화 기준 회계가 그대로 유지돼 환차손 노출이 줄어듭니다',
+          old:{k:'기존 방식', v:'결제일까지 환변동 노출 · 헤지 비용·복잡'},
+          neu:{k:'KRWT', v:'결제 순간 환율 고정 · 원화 기준 정산 단순'}, save:0},
+        {time:'마감', sky:'🌙', band:'glob', icon:'💹', title:'해외 보유 잔액 운용',
+          ctx:'다음 결제 전까지 대기 중인 글로벌 자금.', delta:0, earn:true, earnRate:0.04, act:'어닝 켜기',
+          happen:'대기 자금에 리워드 적립 · 글로벌 어디서든 동일하게 보유·운용',
+          old:{k:'기존 외화 계좌', v:'외화 예치 저금리 · 환전·관리 번거로움'},
+          neu:{k:'KRWT', v:'원화 가치 유지 + 리워드 · 즉시 가용'}, save:0}
+      ]
+    }
+  };
+
+  /* ---------- 상태 ---------- */
+  var st;
+  function freshState(modeKey){
+    var m=MODES[modeKey];
+    return {mode:modeKey, i:0, bal:m?m.startBal:0, saved:0, pays:0, recvCount:0,
+      reward:0, acted:false, animating:false, backendShown:false, earnT:null};
+  }
+
+  /* ---------- HUB ---------- */
+  function renderHub(){
+    if(st && st.earnT){clearInterval(st.earnT);st.earnT=null;}
+    st=null;
+    var cards=[
+      {key:'personal', cls:'', tags:['카페 결제','더치페이','해외직구','구독','어닝'],
+        desc:'아침 카페부터 밤 잔액까지, 한 사람의 하루를 KRWT로 따라가기'},
+      {key:'business', cls:'biz', tags:['실시간 정산','급여 일괄지급','B2B 에스크로','트레저리'],
+        desc:'가맹점 정산·급여·공급망 대금·운전자금까지, 사업자의 자금 흐름'},
+      {key:'global', cls:'glob', tags:['해외송금','무역결제','환율 고정','글로벌 운용'],
+        desc:'국경을 넘는 송금과 무역 대금을, 며칠이 아니라 1분으로'}
+    ];
+    var html='<div class="hub">';
+    cards.forEach(function(c){
+      var m=MODES[c.key];
+      html+='<button class="mode '+c.cls+'" data-mode="'+c.key+'">'
+        +'<span class="mIcon">'+m.icon+'</span>'
+        +'<span class="mBody"><span class="mTitle">'+m.label+'</span>'
+        +'<span class="mDesc">'+c.desc+'</span>'
+        +'<span class="mTags">'+c.tags.map(function(t){return '<span class="mTag">'+t+'</span>';}).join('')+'</span></span>'
+        +'<span class="mArrow">→</span></button>';
+    });
+    html+='</div><p class="hubNote">시작할 모드를 고르세요 · 각 모드는 1~2분이면 끝납니다</p>';
+    $('root').innerHTML=html;
+    Array.prototype.forEach.call(document.querySelectorAll('.mode'),function(b){
+      b.addEventListener('click',function(){ startMode(b.getAttribute('data-mode')); });
+    });
+  }
+
+  function startMode(modeKey){
+    st=freshState(modeKey);
+    var m=MODES[modeKey];
+    $('root').innerHTML=
+      '<div class="device">'
+      + '<div class="top" id="top">'
+        + '<div class="modeChip" id="modeChip"></div>'
+        + '<button class="toHub" id="toHub">← 허브</button>'
+        + '<div class="row"><span class="time" id="time"></span><span class="sky" id="sky"></span></div>'
+        + '<div class="bWrap"><div class="bLab" id="bLab"></div>'
+          + '<div class="bal"><span class="num" id="bal">'+fmt(m.startBal)+'</span><span class="u">KRWT</span></div></div>'
+        + '<div class="progress" id="progress"></div>'
+      + '</div>'
+      + '<div id="stage"></div>'
+      + '<div class="foot"><button class="restart" id="restart">이 모드 처음부터</button></div>'
+      + '</div>';
+    $('modeChip').textContent=m.chip;
+    $('bLab').textContent=m.walletLabel;
+    $('toHub').addEventListener('click',renderHub);
+    $('restart').addEventListener('click',function(){ startMode(st.mode); });
+    renderScene();
+  }
+
+  /* ---------- 공통 렌더 ---------- */
+  function curMode(){ return MODES[st.mode]; }
+  function curScenes(){ return curMode().scenes; }
+
+  function renderProgress(){
+    var p=$('progress'); p.innerHTML=''; var n=curScenes().length;
+    for(var k=0;k<n;k++){
+      var seg=document.createElement('div'); seg.className='seg'+(k<st.i?' done':(k===st.i?' cur':''));
+      p.appendChild(seg);
+    }
+  }
+  function setTop(band){ $('top').style.background=SKY[band]; }
+  function animateBal(to){
+    var from=st.bal;
+    if(reduce){ st.bal=to; $('bal').textContent=fmt(to); return; }
+    var s=performance.now();
+    (function tick(now){ var t=Math.min(1,(now-s)/600),e=1-Math.pow(1-t,3),v=from+(to-from)*e;
+      $('bal').textContent=fmt(v); if(t<1)requestAnimationFrame(tick); else {st.bal=to;$('bal').textContent=fmt(to);} })(s);
+  }
+
+  function vsCards(sc){
+    return '<div class="vs"><div class="vsBox old"><div class="k">'+sc.old.k+'</div><div class="v">'+sc.old.v+'</div></div>'
+      + '<div class="vsBox neu"><div class="k">'+sc.neu.k+'</div><div class="v">'+sc.neu.v+'</div></div></div>';
+  }
+  function qrStage(sc){
+    var pat=[1,1,1,0,1,1,1, 1,0,1,0,1,0,1, 1,1,1,0,1,1,1, 0,0,0,1,0,0,0, 1,1,0,0,1,0,1, 0,0,1,1,0,1,0, 1,0,1,0,1,0,1];
+    var cells=pat.map(function(v){return '<i class="'+(v?'on':'')+'"></i>';}).join('');
+    return '<div class="qrStage" id="qrStage">'
+      + '<div class="counter"><div class="qrPlate"><div class="qrGrid">'+cells+'</div>'
+        + '<div class="scanline"></div><div class="qrDone">✓</div></div><div class="cLabel">'+(sc.qrLabel||'QR')+'</div></div>'
+      + '<div class="phone" id="phone"><div class="pScreen"><div class="pAmt">'+(sc.phones||'')+'</div><div class="pLab">'+(sc.phoneLab||'KRWT')+'</div></div></div>'
+      + '</div>';
+  }
+  function fanStage(sc){
+    var n=sc.fanCount||6, dots='', recv='';
+    var R=44;
+    for(var k=0;k<n;k++){
+      var ang=(-90 + (360/n)*k)*Math.PI/180;
+      var dx=Math.round(Math.cos(ang)*R), dy=Math.round(Math.sin(ang)*R);
+      dots += '<span class="fanDot" style="--x:'+dx+'px;--y:'+dy+'px;transition-delay:'+(k*45)+'ms"></span>';
+      recv += '<span class="fanRecv" style="left:calc(50% + '+dx+'px - 12px);top:calc(50% + '+dy+'px - 12px);'
+        + 'transition-delay:'+(350+k*45)+'ms">👤</span>';
+    }
+    return '<div class="fanStage" id="fanStage">'
+      + '<div class="fanDots">'+dots+'</div>'+recv
+      + '<div class="fanHub"><span class="fa">'+(sc.fanTop||'⚡')+'</span><span class="fl">'+(sc.fanLabel||'일괄 전송')+'</span></div>'
+      + '</div>';
+  }
+  function backendHTML(sc){
+    if(!sc.phases) return '';
+    var idx=0, blocks='';
+    sc.phases.forEach(function(ph){
+      blocks += '<div class="bPhase">'+ph.h+'</div>';
+      ph.steps.forEach(function(b){ idx++;
+        blocks += '<div class="bStep"><span class="bn">'+idx+'</span><div>'
+          + '<div class="bt"><span class="ba">'+b.a+'</span>'+b.t+'</div>'
+          + '<div class="bd">'+b.d+'</div></div></div>';
+      });
+    });
+    return '<div class="backend" id="backend"><div class="bHead">백단에서 실제로 일어나는 일</div>'
+      + '<div id="bSteps">'+blocks+'</div></div>';
+  }
+
+  function renderScene(){
+    var sc=curScenes()[st.i]; st.acted=false; st.animating=false; st.backendShown=false;
+    setTop(sc.band); $('time').textContent=sc.time; $('sky').textContent=sc.sky;
+    renderProgress();
+    var inner, hasBackend=!!sc.phases;
+    if(sc.type==='qr'){
+      inner = '<div class="topVs">'+vsCards(sc)+'</div>'
+        + '<div class="happen happenTop">'+sc.happen+'</div>'
+        + qrStage(sc)
+        + (hasBackend?'<button class="reveal" id="revealBtn">실제 운영 방법 보기 ▾</button>'+backendHTML(sc):'');
+    } else if(sc.type==='fan'){
+      inner = '<div class="topVs">'+vsCards(sc)+'</div>'
+        + '<div class="happen happenTop">'+sc.happen+'</div>'
+        + fanStage(sc)
+        + (hasBackend?'<button class="reveal" id="revealBtn">실제 운영 방법 보기 ▾</button>'+backendHTML(sc):'');
+    } else {
+      var amtTxt = sc.delta>0?('+'+fmt(sc.delta)):(sc.delta<0?('−'+fmt(-sc.delta)):'');
+      var amtColor = sc.delta>0?'var(--jade-deep)':'var(--con)';
+      inner = '<div class="effect" id="effect"><span class="chk">✓</span>'
+        + '<span class="floatAmt" style="color:'+amtColor+'">'+amtTxt+'</span>'
+        + '<span id="effText">'+sc.act.replace(/[(（].*$/,'').trim()+' 준비됨</span></div>'
+        + '<div class="benefit" id="benefit"><div class="happen">'+sc.happen+'</div>'+vsCards(sc)+'</div>';
+    }
+    $('stage').innerHTML='<div class="scene"><div class="sIcon">'+sc.icon+'</div>'
+      + '<div class="sTitle">'+sc.title+'</div><div class="sCtx">'+sc.ctx+'</div>'
+      + inner
+      + '<button class="act'+(sc.earn?' gold':'')+'" id="act">'+sc.act+'</button></div>';
+    $('act').addEventListener('click',onAct);
+    var rb=$('revealBtn'); if(rb) rb.addEventListener('click',toggleBackend);
+  }
+
+  function toggleBackend(){
+    var b=$('backend'), btn=$('revealBtn');
+    var open=b.classList.toggle('show');
+    btn.textContent = open ? '실제 운영 방법 닫기 ▴' : '실제 운영 방법 보기 ▾';
+    if(open && !st.backendShown){
+      st.backendShown=true;
+      var steps=b.querySelectorAll('.bStep');
+      steps.forEach(function(s,k){ setTimeout(function(){ s.classList.add('in'); }, k*200); });
+    }
+  }
+
+  function advance(){
+    if(st.earnT){clearInterval(st.earnT);st.earnT=null;}
+    if(st.i<curScenes().length-1){ st.i++; renderScene(); } else { showSummary(); }
+  }
+  function nextLabel(){ return (st.i<curScenes().length-1)?'다음 →':'결과 보기'; }
+
+  function applyDelta(sc){
+    if(sc.delta!==0){ animateBal(st.bal+sc.delta); if(sc.delta<0)st.pays++; else if(sc.delta>0)st.recvCount++; }
+  }
+  function startEarn(sc){
+    var rate=sc.earnRate||0.02;
+    st.earnT=setInterval(function(){ st.reward+=st.bal*rate/365; },1000);
+  }
+
+  function finishStandard(sc){
+    if(sc.save) st.saved+=sc.save;
+    if(sc.earn) startEarn(sc);
+    $('benefit').classList.add('show');
+    var btn=$('act'); btn.className='act next'; btn.textContent=nextLabel();
+    st.animating=false;
+  }
+
+  function onAct(){
+    var sc=curScenes()[st.i];
+    if(st.animating) return;
+    if(!st.acted){
+      st.acted=true;
+      if(sc.type==='qr'){
+        st.animating=true;
+        var qs=$('qrStage'); qs.classList.add('scan');
+        setTimeout(function(){ qs.classList.add('done'); var pl=document.querySelector('#phone .pLab'); if(pl)pl.textContent='완료'; },950);
+        setTimeout(function(){ applyDelta(sc); },1000);
+        setTimeout(function(){ afterAnimated(sc); },1150);
+      } else if(sc.type==='fan'){
+        st.animating=true;
+        var fs=$('fanStage'); fs.classList.add('go');
+        setTimeout(function(){ fs.classList.add('done'); },500);
+        setTimeout(function(){ applyDelta(sc); },650);
+        setTimeout(function(){ afterAnimated(sc); },1150);
+      } else {
+        var eff=$('effect'); if(eff) eff.classList.add('go');
+        var et=$('effText'); if(et) et.textContent='완료';
+        applyDelta(sc);
+        finishStandard(sc);
+      }
+    } else {
+      advance();
+    }
+  }
+  function afterAnimated(sc){
+    if(sc.save) st.saved+=sc.save;
+    if(sc.earn) startEarn(sc);
+    var rb=$('revealBtn'); if(rb) rb.classList.add('on');
+    var btn=$('act'); btn.className='act next'; btn.textContent=nextLabel();
+    st.animating=false;
+  }
+
+  function showSummary(){
+    var m=curMode();
+    setTop('summary'); $('time').textContent='완료'; $('sky').textContent='✨';
+    st.i=curScenes().length; renderProgress();
+    var rew=Math.max(st.reward, 14);
+    var txCount=st.pays+st.recvCount;
+    var savedTxt = st.saved>0 ? '₩'+fmt(st.saved) : '수수료·시간';
+    var monthTxt = st.mode==='personal'
+      ? '한 달이면 어닝만 약 ₩'+fmt(rew*30)+'.'
+      : (st.mode==='business'
+        ? '카드 정산 대기·수수료·이체 한도가 사라지고, 자금이 마감 순간 손에 있습니다.'
+        : '며칠 걸리던 국경 송금이 1분으로 — 수수료·환변동·영업시간 제약이 사라집니다.');
+    var note = st.mode==='personal'
+      ? '카페·해외직구·구독은 즉시 결제됐고, 친구 정산은 1초, 환전소도 영업시간도 필요 없었습니다. 남은 잔액엔 리워드가 쌓이고요. '+monthTxt
+      : (st.mode==='business'
+        ? '매출은 마감 순간 정산, 급여 24명은 1분 내 일괄, 공급사 대금은 조건부 에스크로로 안전하게. 유휴 자금엔 리워드까지. '+monthTxt
+        : '가족 송금은 1분, 무역 대금은 조건부 에스크로, 환율은 결제 순간 고정. '+monthTxt);
+
+    $('stage').innerHTML =
+      '<div class="sum">'
+      + '<h2>'+m.summaryTitle+'</h2>'
+      + '<div class="grid">'
+        + scard(st.mode==='business'?'정산·지급·결제':'결제·송금', txCount+'건', false)
+        + scard('정산 속도', '모두 즉시', true)
+        + scard('아낀 비용', savedTxt, true)
+        + scard('어닝 적립', '+₩'+fmt(rew)+'/일', true)
+      + '</div>'
+      + '<div class="sumNote">'+note+'</div>'
+      + '<div class="sumBtns">'
+        + '<button class="act next" id="toHub2">다른 모드 보기</button>'
+        + '<button class="act" id="replay">'+m.replayLabel+'</button>'
+      + '</div>'
+      + '</div>';
+    $('toHub2').addEventListener('click',renderHub);
+    $('replay').addEventListener('click',function(){ startMode(st.mode); });
+  }
+  function scard(k,v,j){ return '<div class="scard"><div class="k">'+k+'</div><div class="v'+(j?' j':'')+'">'+v+'</div></div>'; }
+
+  renderHub();
+})();
+</script>
+</body>
+</html>
