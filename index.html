@@ -42,6 +42,7 @@
   .mode .mIcon{flex:0 0 auto;width:48px;height:48px;border-radius:14px;display:flex;align-items:center;
     justify-content:center;font-size:24px;background:var(--jade-tint)}
   .mode.biz .mIcon{background:var(--gold-tint)} .mode.glob .mIcon{background:var(--blue-tint)}
+  .mode.reg .mIcon{background:#ECE7F6}
   .mode .mBody{flex:1;min-width:0}
   .mode .mTitle{font-size:15.5px;font-weight:800;letter-spacing:-.01em}
   .mode .mDesc{font-size:12px;color:var(--ink-soft);margin-top:2px;line-height:1.45}
@@ -361,6 +362,59 @@
           old:{k:'기존 외화 계좌', v:'외화 예치 저금리 · 환전·관리 번거로움'},
           neu:{k:'KRWT', v:'원화 가치 유지 + 리워드 · 즉시 가용'}, save:0}
       ]
+    },
+
+    regulation:{
+      label:'규제·발행 관점', icon:'🏛️', chip:'제도 · 신뢰', infoMode:true,
+      walletLabel:'원화 스테이블코인 · 신뢰 구조', tagline:'누가 발행하고, 무엇이 가치를 보장하나',
+      startBal:0, replayLabel:'다시 살펴보기',
+      summaryTitle:'신뢰가 받치는 원화 스테이블코인',
+      scenes:[
+        {time:'쟁점 ①', sky:'🏦', band:'biz', icon:'🏛️', title:'누가 발행하나', type:'info',
+          ctx:'은행이냐, 빅테크·카드사냐 — 발행 주체 논쟁.',
+          happen:'신뢰의 핵심은 "누가 발행하느냐"보다 준비자산·상환보장·감독 설계입니다',
+          old:{k:'쟁점', v:'비은행 발행 시 예금 잠식·통화정책 교란 우려 / 은행 발행 시 혁신 속도 우려'},
+          neu:{k:'설계 방향', v:'인가받은 발행사 · 발행·유통·지갑 역할 분리 · 준비자산 분리예치'},
+          phases:[
+            {h:'발행이 신뢰를 얻는 구조', steps:[
+              {a:'인가', t:'라이선스 기반 발행', d:'감독당국 인가를 받은 발행사만 발행 · 자본·내부통제 요건'},
+              {a:'분리', t:'준비자산 분리예치', d:'발행액 = 준비자산 · 신탁/분리보관으로 발행사 도산과 절연'},
+              {a:'권리', t:'1:1 상환청구권', d:'보유자는 언제든 1원=1KRWT 원화 상환을 법적으로 청구'},
+              {a:'검증', t:'감사·공시', d:'외부감사·정기 공시로 준비자산을 제3자가 검증'}
+            ]}
+          ]},
+        {time:'쟁점 ②', sky:'🪙', band:'biz', icon:'🛡️', title:'무엇이 가치를 보장하나', type:'info',
+          ctx:'1원 = 1KRWT, 그 1원은 어디에 있나.',
+          happen:'1원=1KRWT는 "믿음"이 아니라 준비자산에 대한 "상환청구권"으로 보장됩니다',
+          old:{k:'우려', v:'알고리즘·부분준비형의 디페깅 리스크 (테라 붕괴, USDC 일시 디페그 사례)'},
+          neu:{k:'설계 방향', v:'현금성 자산 1:1 풀백 · 신탁 분리보관 · 정기 감사/공시 · 즉시 상환'},
+          phases:[
+            {h:'준비자산이 작동하는 방식', steps:[
+              {a:'구성', t:'현금성 자산 1:1', d:'예치금·단기 국공채 등 안전·유동 자산으로 100% 이상 백업'},
+              {a:'보관', t:'분리보관(신탁)', d:'발행사 고유재산과 분리 → 도산 시에도 보유자 자산 보호'},
+              {a:'검증', t:'정기 어테스테이션', d:'감사인의 준비자산 보고서를 주기적으로 공시'},
+              {a:'상환', t:'환매 → 소각 → 지급', d:'상환 요청 시 KRWT 소각 후 등록 계좌로 원화 지급'}
+            ]}
+          ]},
+        {time:'쟁점 ③', sky:'⚖️', band:'glob', icon:'🔐', title:'이용자는 어떻게 보호되나', type:'info',
+          ctx:'해킹·도난·파산이 나면 내 돈은?',
+          happen:'"돈"으로 쓰이려면 결제 UX만큼 이용자 보호·규제 준수가 전제입니다',
+          old:{k:'공백 우려', v:'보관 중 해킹·도난·발행사 파산 시 소비자 보호 장치 미비'},
+          neu:{k:'제도 기반', v:'가상자산이용자보호법(2024.7) · 실명확인·트래블룰 · 콜드월렛·보험·배상'},
+          phases:[
+            {h:'이용자 보호 · AML 흐름', steps:[
+              {a:'KYC', t:'실명확인', d:'실명계좌·신원확인 기반 발급 · 한도·연령 정책'},
+              {a:'트래블룰', t:'VASP 간 정보공유', d:'일정액 이상 송수신 시 송·수신자 정보 공유로 자금세탁 차단'},
+              {a:'자산보호', t:'콜드월렛·보험·준비금', d:'대부분 오프라인 보관 + 사고 대비 보험/준비금'},
+              {a:'구제', t:'분쟁·배상 절차', d:'사고·오류 시 배상·구제 프로세스 명문화'}
+            ]}
+          ]},
+        {time:'쟁점 ④', sky:'🌐', band:'glob', icon:'🏛️', title:'CBDC와 무엇이 다른가', type:'info',
+          ctx:'한국은행 CBDC와 민간 스테이블코인, 경쟁일까.',
+          happen:'한국에선 한은 CBDC 실험과 민간 스테이블코인이 경쟁이 아니라 보완으로 공존할 수 있습니다',
+          old:{k:'CBDC (공공)', v:'중앙은행 직접 발행 · 공공 인프라 · 프라이버시·통제 논쟁, 혁신 속도 한계'},
+          neu:{k:'스테이블코인 (민간)', v:'프로그래머빌리티·속도·서비스 경쟁 · 신뢰는 준비자산·규제로 보강'}}
+      ]
     }
   };
 
@@ -382,7 +436,9 @@
       {key:'business', cls:'biz', tags:['실시간 정산','급여 일괄지급','B2B 에스크로','트레저리'],
         desc:'가맹점 정산·급여·공급망 대금·운전자금까지, 사업자의 자금 흐름'},
       {key:'global', cls:'glob', tags:['해외송금','무역결제','환율 고정','글로벌 운용'],
-        desc:'국경을 넘는 송금과 무역 대금을, 며칠이 아니라 1분으로'}
+        desc:'국경을 넘는 송금과 무역 대금을, 며칠이 아니라 1분으로'},
+      {key:'regulation', cls:'reg', tags:['발행 주체','준비자산','이용자보호법','CBDC 비교'],
+        desc:'누가 발행하고 무엇이 가치를 보장하나 — 한국의 규제·신뢰 관점'}
     ];
     var html='<div class="hub">';
     cards.forEach(function(c){
@@ -404,6 +460,9 @@
   function startMode(modeKey){
     st=freshState(modeKey);
     var m=MODES[modeKey];
+    var balBlock = m.infoMode
+      ? '<div class="bal" style="font-size:18px;line-height:1.35;max-width:30ch">'+m.tagline+'</div>'
+      : '<div class="bal"><span class="num" id="bal">'+fmt(m.startBal)+'</span><span class="u">KRWT</span></div>';
     $('root').innerHTML=
       '<div class="device">'
       + '<div class="top" id="top">'
@@ -411,7 +470,7 @@
         + '<button class="toHub" id="toHub">← 허브</button>'
         + '<div class="row"><span class="time" id="time"></span><span class="sky" id="sky"></span></div>'
         + '<div class="bWrap"><div class="bLab" id="bLab"></div>'
-          + '<div class="bal"><span class="num" id="bal">'+fmt(m.startBal)+'</span><span class="u">KRWT</span></div></div>'
+          + balBlock + '</div>'
         + '<div class="progress" id="progress"></div>'
       + '</div>'
       + '<div id="stage"></div>'
@@ -492,6 +551,7 @@
     setTop(sc.band); $('time').textContent=sc.time; $('sky').textContent=sc.sky;
     renderProgress();
     var inner, hasBackend=!!sc.phases;
+    var actClass='act'+(sc.earn?' gold':''), actLabel=sc.act;
     if(sc.type==='qr'){
       inner = '<div class="topVs">'+vsCards(sc)+'</div>'
         + '<div class="happen happenTop">'+sc.happen+'</div>'
@@ -502,6 +562,11 @@
         + '<div class="happen happenTop">'+sc.happen+'</div>'
         + fanStage(sc)
         + (hasBackend?'<button class="reveal" id="revealBtn">실제 운영 방법 보기 ▾</button>'+backendHTML(sc):'');
+    } else if(sc.type==='info'){
+      actClass='act next'; actLabel=nextLabel();
+      inner = '<div class="happen happenTop">'+sc.happen+'</div>'
+        + '<div class="topVs">'+vsCards(sc)+'</div>'
+        + (hasBackend?'<button class="reveal on" id="revealBtn">실제 작동 구조 보기 ▾</button>'+backendHTML(sc):'');
     } else {
       var amtTxt = sc.delta>0?('+'+fmt(sc.delta)):(sc.delta<0?('−'+fmt(-sc.delta)):'');
       var amtColor = sc.delta>0?'var(--jade-deep)':'var(--con)';
@@ -513,7 +578,7 @@
     $('stage').innerHTML='<div class="scene"><div class="sIcon">'+sc.icon+'</div>'
       + '<div class="sTitle">'+sc.title+'</div><div class="sCtx">'+sc.ctx+'</div>'
       + inner
-      + '<button class="act'+(sc.earn?' gold':'')+'" id="act">'+sc.act+'</button></div>';
+      + '<button class="'+actClass+'" id="act">'+actLabel+'</button></div>';
     $('act').addEventListener('click',onAct);
     var rb=$('revealBtn'); if(rb) rb.addEventListener('click',toggleBackend);
   }
@@ -554,6 +619,7 @@
   function onAct(){
     var sc=curScenes()[st.i];
     if(st.animating) return;
+    if(sc.type==='info'){ advance(); return; }
     if(!st.acted){
       st.acted=true;
       if(sc.type==='qr'){
@@ -590,6 +656,7 @@
     var m=curMode();
     setTop('summary'); $('time').textContent='완료'; $('sky').textContent='✨';
     st.i=curScenes().length; renderProgress();
+    if(m.infoMode){ showInfoSummary(m); return; }
     var rew=Math.max(st.reward, 14);
     var txCount=st.pays+st.recvCount;
     var savedTxt = st.saved>0 ? '₩'+fmt(st.saved) : '수수료·시간';
@@ -623,6 +690,26 @@
     $('replay').addEventListener('click',function(){ startMode(st.mode); });
   }
   function scard(k,v,j){ return '<div class="scard"><div class="k">'+k+'</div><div class="v'+(j?' j':'')+'">'+v+'</div></div>'; }
+
+  function showInfoSummary(m){
+    $('stage').innerHTML =
+      '<div class="sum">'
+      + '<h2>'+m.summaryTitle+'</h2>'
+      + '<div class="grid">'
+        + scard('발행', '인가 발행', true)
+        + scard('가치 보장', '준비자산 1:1', true)
+        + scard('이용자 보호', '법·트래블룰', true)
+        + scard('CBDC와', '보완 공존', true)
+      + '</div>'
+      + '<div class="sumNote">원화 스테이블코인이 "돈"으로 자리잡으려면 빠른 결제 경험만큼이나 ① 인가받은 발행 ② 준비자산 1:1·상환보장 ③ 이용자보호법·AML ④ CBDC와의 역할 분담이 받쳐줘야 합니다. 결국 <b>경험 설계와 신뢰 설계는 한 몸</b>입니다.</div>'
+      + '<div class="sumBtns">'
+        + '<button class="act next" id="toHub2">다른 모드 보기</button>'
+        + '<button class="act" id="replay">'+m.replayLabel+'</button>'
+      + '</div>'
+      + '</div>';
+    $('toHub2').addEventListener('click',renderHub);
+    $('replay').addEventListener('click',function(){ startMode(st.mode); });
+  }
 
   renderHub();
 })();
