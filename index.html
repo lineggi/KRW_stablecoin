@@ -510,6 +510,12 @@
     return '<div class="vs"><div class="vsBox old"><div class="k">'+sc.old.k+'</div><div class="v">'+sc.old.v+'</div></div>'
       + '<div class="vsBox neu"><div class="k">'+sc.neu.k+'</div><div class="v">'+sc.neu.v+'</div></div></div>';
   }
+  function diffBlock(sc){
+    var label = (sc.vsTitle!==undefined) ? sc.vsTitle : '💡 지금이랑 뭐가 다를까?';
+    return '<div class="happen">'+sc.happen+'</div>'
+      + (label ? '<div class="vsLabel">'+label+'</div>' : '')
+      + vsCards(sc);
+  }
   function qrStage(sc){
     var pat=[1,1,1,0,1,1,1, 1,0,1,0,1,0,1, 1,1,1,0,1,1,1, 0,0,0,1,0,0,0, 1,1,0,0,1,0,1, 0,0,1,1,0,1,0, 1,0,1,0,1,0,1];
     var cells=pat.map(function(v){return '<i class="'+(v?'on':'')+'"></i>';}).join('');
@@ -557,11 +563,11 @@
     var actClass='act'+(sc.earn?' gold':''), actLabel=sc.act;
     if(sc.type==='qr'){
       inner = qrStage(sc)
-        + '<div class="benefit" id="benefit"><div class="happen">'+sc.happen+'</div>'+vsCards(sc)+'</div>'
+        + '<div class="benefit" id="benefit">'+diffBlock(sc)+'</div>'
         + (hasBackend?'<button class="reveal" id="revealBtn">뒤에서 어떻게 되는지 보기 ▾</button>'+backendHTML(sc):'');
     } else if(sc.type==='fan'){
       inner = fanStage(sc)
-        + '<div class="benefit" id="benefit"><div class="happen">'+sc.happen+'</div>'+vsCards(sc)+'</div>'
+        + '<div class="benefit" id="benefit">'+diffBlock(sc)+'</div>'
         + (hasBackend?'<button class="reveal" id="revealBtn">뒤에서 어떻게 되는지 보기 ▾</button>'+backendHTML(sc):'');
     } else if(sc.type==='info'){
       actClass='act next'; actLabel=nextLabel();
@@ -573,8 +579,8 @@
       var amtColor = sc.delta>0?'var(--jade-deep)':'var(--con)';
       inner = '<div class="effect" id="effect"><span class="chk">✓</span>'
         + '<span class="floatAmt" style="color:'+amtColor+'">'+amtTxt+'</span>'
-        + '<span id="effText">'+sc.act.replace(/[(（].*$/,'').trim()+' 준비됨</span></div>'
-        + '<div class="benefit" id="benefit"><div class="happen">'+sc.happen+'</div>'+vsCards(sc)+'</div>';
+        + '<span id="effText">'+sc.act.replace(/[(（].*$/,'').trim()+'</span></div>'
+        + '<div class="benefit" id="benefit">'+diffBlock(sc)+'</div>';
     }
     $('stage').innerHTML='<div class="scene"><div class="sIcon">'+sc.icon+'</div>'
       + '<div class="sTitle">'+sc.title+'</div><div class="sCtx">'+sc.ctx+'</div>'
@@ -636,10 +642,11 @@
         setTimeout(function(){ applyDelta(sc); },650);
         setTimeout(function(){ afterAnimated(sc); },1150);
       } else {
+        st.animating=true;
         var eff=$('effect'); if(eff) eff.classList.add('go');
-        var et=$('effText'); if(et) et.textContent='완료';
+        var et=$('effText'); if(et) et.textContent='완료!';
         applyDelta(sc);
-        finishStandard(sc);
+        setTimeout(function(){ finishStandard(sc); }, reduce?0:750);
       }
     } else {
       advance();
