@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>원화 스테이블코인이 들어온 하루</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link rel="stylesheet" as="style" crossorigin href="https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.3.9/static/pretendard.css">
 <style>
@@ -159,14 +160,14 @@
 
   <span class="eyebrow"><span class="dot"></span>원화 스테이블코인 · 일상</span>
   <h1>원화 스테이블코인이 들어온 <b>하루</b></h1>
-  <p class="sub">아침부터 밤까지, KRWT가 실제로 어떻게 쓰일지 따라가 보세요. 장면마다 기존 방식과 뭐가 다른지 보입니다.</p>
+  <p class="sub">아침부터 밤까지, KRWS가 실제로 어떻게 쓰일지 따라가 보세요. 장면마다 기존 방식과 뭐가 다른지 보입니다.</p>
 
   <div class="device">
     <div class="top" id="top">
       <div class="row"><span class="time" id="time">오전 8:10</span><span class="sky" id="sky">🌅</span></div>
       <div class="bWrap">
-        <div class="bLab">내 KRWT 지갑</div>
-        <div class="bal"><span class="num" id="bal">300,000</span><span class="u">KRWT</span></div>
+        <div class="bLab">내 KRWS 지갑</div>
+        <div class="bal"><span class="num" id="bal">300,000</span><span class="u">KRWS</span></div>
       </div>
       <div class="progress" id="progress"></div>
     </div>
@@ -178,7 +179,7 @@
 
   <div class="frame">
     <div class="lab">왜 이게 내 일인가</div>
-    <p>발행이 은행이든 누구든, 사람들이 KRWT를 <b>이렇게 자연스럽게 쓰게 만드는 경험</b> — 결제·송금·해외·구독·어닝 — 을 설계하는 게 지갑 PM의 일입니다. USDT로 4.5년 해온 그 자리.</p>
+    <p>발행이 은행이든 누구든, 사람들이 KRWS를 <b>이렇게 자연스럽게 쓰게 만드는 경험</b> — 결제·송금·해외·구독·어닝 — 을 설계하는 게 지갑 PM의 일입니다. USDT로 4.5년 해온 그 자리.</p>
   </div>
 
 </div>
@@ -204,41 +205,41 @@
       phases:[
         {h:'단계 1 · 실시간 결제 & 즉시 정산', steps:[
           {a:'사용자→앱', t:'QR 스캔·결제 승인', d:'지갑이 가맹점 주소·금액(₩4,500)을 읽고 사용자가 승인'},
-          {a:'앱→블록체인', t:'KRWT 전송 실행', d:'사용자 지갑 → 가맹점 지갑 · 가스는 앱이 대납(가스리스)'},
+          {a:'앱→블록체인', t:'KRWS 전송 실행', d:'사용자 지갑 → 가맹점 지갑 · 가스는 앱이 대납(가스리스)'},
           {a:'블록체인', t:'소유권 이전·기록', d:'카운터 속도 위해 제출 즉시 낙관적 승인, 온체인 확정은 수 초 내'},
           {a:'앱→사용자', t:'"결제 완료" 알림', d:'사용자 화면엔 즉시 완료 표시'},
-          {a:'체인→포털', t:'입금 이벤트(웹훅)', d:'정산 포털 수신 → 사장님에게 "매출 입금(KRWT)" 알림'}
+          {a:'체인→포털', t:'입금 이벤트(웹훅)', d:'정산 포털 수신 → 사장님에게 "매출 입금(KRWS)" 알림'}
         ]},
         {h:'단계 2 · 가맹점 원화 환매 (선택 · 보통 일 배치)', steps:[
           {a:'가맹점→포털', t:'원화 환매 신청', d:'건별 즉시 or 일 단위로 묶어서 신청 (안 바꾸고 보유도 가능)'},
-          {a:'포털→발행사', t:'KRWT 소각 요청', d:'소각 권한은 발행사(은행) · 가맹점 코인이 소멸'},
+          {a:'포털→발행사', t:'KRWS 소각 요청', d:'소각 권한은 발행사(은행) · 가맹점 코인이 소멸'},
           {a:'발행 은행→가맹점', t:'원화 이체', d:'예치된 준비자산 → 가맹점 계좌(오픈뱅킹 API) · AML 점검'},
           {a:'포털→가맹점', t:'"원화 입금 완료"', d:'등록 계좌로 입금 완료 알림'}
         ]}
       ],
       happen:'겉은 QR 한 번 — 뒤에선 ① 온체인 즉시 결제 ② 가맹점 원화 환매, 2단계로 돕니다',
       old:{k:'기존 카드', v:'사장님은 2~3일 뒤 정산 + 카드 수수료'},
-      neu:{k:'KRWT', v:'온체인 즉시 정산 · 환매도 가맹점 선택'}, save:0},
+      neu:{k:'KRWS', v:'온체인 즉시 정산 · 환매도 가맹점 선택'}, save:0},
     {time:'오후 12:30', sky:'🌤️', band:'noon', icon:'🍜', title:'점심, 더치페이',
       ctx:'동료 몫까지 내가 냈고, 바로 정산받기.', delta:+12000, act:'친구가 보내기 → ₩12,000 받기',
       happen:'친구가 탭 한 번. 1초 만에 내 지갑으로',
       old:{k:'기존 이체', v:'은행 앱·타행 시간·이체 한도'},
-      neu:{k:'KRWT', v:'1초 · 24시간 · 앱 안에서 바로'}, save:0},
+      neu:{k:'KRWS', v:'1초 · 24시간 · 앱 안에서 바로'}, save:0},
     {time:'오후 3:00', sky:'🛍️', band:'afternoon', icon:'🛒', title:'오후, 해외 직구',
       ctx:'미국 쇼핑몰에서 $30 결제.', delta:-41400, act:'$30 결제 (환율 고정 ₩1,380)',
-      happen:'KRWT가 즉시 USD로 환전돼 결제 · 환율은 결제 순간 고정',
+      happen:'KRWS가 즉시 USD로 환전돼 결제 · 환율은 결제 순간 고정',
       old:{k:'기존 카드', v:'환전+해외수수료 약 3.5% (≈₩1,450)'},
-      neu:{k:'KRWT', v:'스프레드 절반 (≈₩410) · 환전소 불필요'}, save:1040},
+      neu:{k:'KRWS', v:'스프레드 절반 (≈₩410) · 환전소 불필요'}, save:1040},
     {time:'오후 7:00', sky:'🌆', band:'evening', icon:'📺', title:'저녁, 구독료',
       ctx:'스트리밍 정기결제 ₩9,900.', delta:-9900, act:'자동결제 ₩9,900',
       happen:'잔액에서 자동 결제 · 프로그래머블이라 조건·한도도 설정 가능',
       old:{k:'기존 카드', v:'카드 만료·갱신 실패로 끊김 리스크'},
-      neu:{k:'KRWT', v:'잔액 기반 자동 · 영수증 투명'}, save:0},
+      neu:{k:'KRWS', v:'잔액 기반 자동 · 영수증 투명'}, save:0},
     {time:'밤 11:00', sky:'🌙', band:'night', icon:'🌙', title:'밤, 남은 잔액',
       ctx:'오늘 안 쓴 잔액은 그냥 두기만.', delta:0, earn:true, act:'어닝 켜기',
       happen:'유휴 잔액에 리워드 적립 (이자가 아니라 리워드형)',
       old:{k:'기존 통장', v:'수시입출금 이자 0%대'},
-      neu:{k:'KRWT', v:'두기만 해도 리워드가 쌓임'}, save:0}
+      neu:{k:'KRWS', v:'두기만 해도 리워드가 쌓임'}, save:0}
   ];
 
   var st={i:0, bal:300000, saved:0, pays:0, reward:0, acted:false, animating:false, backendShown:false, earnT:null};
@@ -269,7 +270,7 @@
     return '<div class="qrStage" id="qrStage">'
       + '<div class="counter"><div class="qrPlate"><div class="qrGrid">'+cells+'</div>'
         + '<div class="scanline"></div><div class="qrDone">✓</div></div><div class="cLabel">카페 QR</div></div>'
-      + '<div class="phone" id="phone"><div class="pScreen"><div class="pAmt">₩4,500</div><div class="pLab">KRWT 결제</div></div></div>'
+      + '<div class="phone" id="phone"><div class="pScreen"><div class="pAmt">₩4,500</div><div class="pLab">KRWS 결제</div></div></div>'
       + '</div>';
   }
   function backendHTML(sc){
@@ -369,7 +370,7 @@
     var rew=Math.max(st.reward, 14);
     $('stage').innerHTML =
       '<div class="sum">'
-      + '<h2>오늘, KRWT로 보낸 하루</h2>'
+      + '<h2>오늘, KRWS로 보낸 하루</h2>'
       + '<div class="grid">'
         + scard('결제·송금', (st.pays+1)+'건', false)
         + scard('정산 속도', '모두 즉시', true)

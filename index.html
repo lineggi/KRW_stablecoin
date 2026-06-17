@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>원화 스테이블코인 시뮬레이터 — 어디에 어떻게 쓰일까</title>
-<meta name="description" content="원화 스테이블코인(KRWT)이 개인 일상·기업/가맹점·글로벌 송금에서 실제로 어떻게 쓰이는지, 기존 방식과 무엇이 다른지 장면으로 따라가는 인터랙티브 시뮬레이터.">
+<meta name="description" content="원화 스테이블코인(KRWS)이 개인 일상·기업/가맹점·글로벌 송금에서 실제로 어떻게 쓰이는지, 기존 방식과 무엇이 다른지 장면으로 따라가는 인터랙티브 시뮬레이터.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="favicon.svg">
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link rel="stylesheet" as="style" crossorigin href="https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.3.9/static/pretendard.css">
 <style>
@@ -56,16 +58,17 @@
   .device{margin-top:16px;border-radius:30px;background:var(--card);box-shadow:var(--shadow);
     border:1px solid var(--line);overflow:hidden}
   .top{padding:16px 18px 14px;color:#EAF4EF;position:relative;transition:background .6s}
-  .top .row{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}
-  .time{font-size:12px;font-weight:700;letter-spacing:.02em;opacity:.9}
+  .topBar{display:flex;justify-content:space-between;align-items:center;gap:8px;position:relative;z-index:2}
+  .top .row{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1;margin-top:13px}
+  .time{font-size:12.5px;font-weight:700;letter-spacing:.02em;opacity:.92}
   .sky{font-size:18px}
-  .modeChip{position:absolute;top:14px;left:18px;z-index:2;font-size:10px;font-weight:800;letter-spacing:.04em;
-    background:rgba(255,255,255,.18);color:#fff;padding:4px 9px;border-radius:999px;backdrop-filter:blur(4px)}
-  .toHub{position:absolute;top:12px;right:14px;z-index:2;border:none;background:rgba(255,255,255,.16);color:#fff;
-    font-family:inherit;font-size:11px;font-weight:700;border-radius:999px;padding:5px 11px;cursor:pointer;transition:.16s}
+  .modeChip{font-size:10.5px;font-weight:800;letter-spacing:.04em;
+    background:rgba(255,255,255,.2);color:#fff;padding:5px 11px;border-radius:999px;backdrop-filter:blur(4px)}
+  .toHub{border:none;background:rgba(255,255,255,.18);color:#fff;
+    font-family:inherit;font-size:11.5px;font-weight:700;border-radius:999px;padding:6px 12px;cursor:pointer;transition:.16s}
   .toHub:hover{background:rgba(255,255,255,.3)}
   .toHub:focus-visible{outline:2px solid #fff;outline-offset:1px}
-  .bWrap{margin-top:26px;position:relative;z-index:1}
+  .bWrap{margin-top:16px;position:relative;z-index:1}
   .bLab{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.7;font-weight:700}
   .bal{font-size:32px;font-weight:800;letter-spacing:-.01em;margin-top:2px}
   .bal .u{font-size:13px;opacity:.8;font-weight:700;margin-left:5px}
@@ -76,9 +79,9 @@
 
   /* scene */
   .scene{padding:20px 18px 8px}
-  .sIcon{font-size:34px;line-height:1}
-  .sTitle{font-size:18px;font-weight:800;margin-top:8px}
-  .sCtx{font-size:13px;color:var(--ink-soft);margin-top:3px}
+  .sIcon{font-size:36px;line-height:1}
+  .sTitle{font-size:20px;font-weight:800;margin-top:8px;letter-spacing:-.01em}
+  .sCtx{font-size:14.5px;color:var(--ink-soft);margin-top:5px;line-height:1.5}
 
   .effect{height:50px;margin:14px 0 2px;display:flex;align-items:center;justify-content:center;
     font-size:13px;color:var(--ink-soft);font-weight:600;text-align:center;line-height:1.4;position:relative}
@@ -92,14 +95,17 @@
 
   .benefit{display:none;margin-top:6px}
   .benefit.show{display:block;animation:fade .4s ease}
-  .happen{font-size:13px;color:var(--jade-deep);font-weight:600;text-align:center;margin-bottom:11px}
+  .happen{font-size:14.5px;color:var(--jade-deep);font-weight:700;text-align:center;margin-bottom:13px;
+    background:var(--jade-tint);border:1px solid #C6E6D6;border-radius:12px;padding:11px 13px;line-height:1.55}
+  .vsLabel{font-size:11px;font-weight:800;color:var(--ink-faint);text-align:center;
+    letter-spacing:.04em;margin-bottom:7px}
   .vs{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-  .vsBox{border-radius:13px;padding:11px 13px}
+  .vsBox{border-radius:13px;padding:12px 13px}
   .vsBox.old{background:var(--con-tint);border:1px solid #F2D3CA}
   .vsBox.neu{background:var(--jade-tint);border:1px solid #C6E6D6}
-  .vsBox .k{font-size:10px;font-weight:800;letter-spacing:.02em}
+  .vsBox .k{font-size:11.5px;font-weight:800;letter-spacing:.01em}
   .vsBox.old .k{color:var(--con)} .vsBox.neu .k{color:var(--jade-deep)}
-  .vsBox .v{font-size:12px;margin-top:4px;line-height:1.45;font-weight:600}
+  .vsBox .v{font-size:13px;margin-top:5px;line-height:1.5;font-weight:600}
   .vsBox.old .v{color:#5A332B} .vsBox.neu .v{color:#234A3C}
   @keyframes fade{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
 
@@ -174,8 +180,8 @@
   .bStep .bn{flex:0 0 auto;width:20px;height:20px;border-radius:50%;background:var(--jade-tint);
     color:var(--jade-deep);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px}
   .bStep.in .bn{background:var(--jade);color:#fff}
-  .bStep .bt{font-size:12.5px;font-weight:700}
-  .bStep .bd{font-size:11px;color:var(--ink-soft);margin-top:1px;line-height:1.4}
+  .bStep .bt{font-size:13px;font-weight:700}
+  .bStep .bd{font-size:11.5px;color:var(--ink-soft);margin-top:2px;line-height:1.45}
 
   .foot{padding:4px 18px 18px}
   .restart{display:block;width:100%;background:none;border:none;font-family:inherit;font-size:12px;
@@ -205,13 +211,13 @@
 
   <span class="eyebrow"><span class="dot"></span>원화 스테이블코인 · 활용 시뮬레이터</span>
   <h1>원화 스테이블코인은 <b>어디에 어떻게</b> 쓰일까</h1>
-  <p class="sub">개인의 하루부터 기업 정산, 국경을 넘는 송금까지 — KRWT가 실제로 어떻게 쓰일지 장면으로 따라가 보세요. 매 장면마다 기존 방식과 뭐가 다른지, 뒤에선 무슨 일이 일어나는지 보입니다.</p>
+  <p class="sub">디지털 원화(원화 스테이블코인)가 우리 생활에서 어떻게 쓰일지, 장면을 하나씩 따라가며 쉽게 볼 수 있어요. 빨간 칸은 <b>지금 방식</b>, 초록 칸은 <b>디지털 원화로 바뀌면</b> 어떻게 되는지예요.</p>
 
   <div id="root"></div>
 
   <div class="frame">
     <div class="lab">왜 이게 내 일인가</div>
-    <p>발행 주체가 은행이든 누구든, 사람들이 KRWT를 <b>이렇게 자연스럽게 쓰게 만드는 경험</b> — 결제·송금·정산·해외·구독·어닝 — 을 설계하는 게 지갑 PM의 일입니다. USDT로 4.5년 해온 바로 그 자리.</p>
+    <p>발행 주체가 은행이든 누구든, 사람들이 KRWS를 <b>이렇게 자연스럽게 쓰게 만드는 경험</b> — 결제·송금·정산·해외·구독·어닝 — 을 설계하는 게 지갑 PM의 일입니다. USDT로 4.5년 해온 바로 그 자리.</p>
   </div>
 
 </div>
@@ -236,184 +242,181 @@
   /* ---------- 모드별 시나리오 데이터 ---------- */
   var MODES={
     personal:{
-      label:'개인 일상', icon:'🧑', chip:'B2C · 개인',
-      walletLabel:'내 KRWT 지갑', startBal:300000, replayLabel:'다시 하루 살아보기',
-      summaryTitle:'오늘, KRWT로 보낸 하루',
+      label:'개인 일상', icon:'🧑', chip:'개인 · 하루',
+      walletLabel:'내 디지털 원화 지갑', startBal:300000, replayLabel:'다시 하루 살아보기',
+      summaryTitle:'오늘, 디지털 원화로 보낸 하루',
       scenes:[
-        {time:'오전 8:10', sky:'🌅', band:'morning', icon:'☕', title:'아침, 동네 카페',
-          ctx:'출근길 라떼 한 잔. 핸드폰으로 카페 QR을 찍습니다.', delta:-4500, act:'QR 코드 스캔', type:'qr',
-          phones:'₩4,500', phoneLab:'KRWT 결제',
+        {time:'아침 8:10', sky:'🌅', band:'morning', icon:'☕', title:'아침, 동네 카페', delta:-4500, act:'QR 코드 찍기', type:'qr',
+          ctx:'출근길에 라떼 한 잔! 핸드폰으로 가게 QR 코드를 찍어요.',
+          phones:'₩4,500', phoneLab:'결제 중',
           phases:[
-            {h:'단계 1 · 실시간 결제 & 즉시 정산', steps:[
-              {a:'사용자→앱', t:'QR 스캔·결제 승인', d:'지갑이 가맹점 주소·금액(₩4,500)을 읽고 사용자가 승인'},
-              {a:'앱→블록체인', t:'KRWT 전송 실행', d:'사용자 지갑 → 가맹점 지갑 · 가스는 앱이 대납(가스리스)'},
-              {a:'블록체인', t:'소유권 이전·기록', d:'카운터 속도 위해 제출 즉시 낙관적 승인, 온체인 확정은 수 초 내'},
-              {a:'앱→사용자', t:'"결제 완료" 알림', d:'사용자 화면엔 즉시 완료 표시'},
-              {a:'체인→포털', t:'입금 이벤트(웹훅)', d:'정산 포털 수신 → 사장님에게 "매출 입금(KRWT)" 알림'}
+            {h:'1단계 · 결제는 단 1초', steps:[
+              {a:'찍기', t:'QR을 찍어요', d:'얼마를 누구한테 내는지 화면에 떠요. "확인"만 누르면 끝!'},
+              {a:'이동', t:'내 지갑 → 가게 지갑', d:'디지털 돈이 가게 지갑으로 바로 이동해요. 보내는 수수료는 앱이 대신 내줘요.'},
+              {a:'기록', t:'안전하게 기록', d:'누가 못 바꾸게 거래가 안전하게 저장돼요.'},
+              {a:'알림', t:'"결제 완료!"', d:'내 화면엔 바로 "완료", 사장님께도 "돈 들어왔어요" 알림이 가요.'}
             ]},
-            {h:'단계 2 · 가맹점 원화 환매 (선택 · 보통 일 배치)', steps:[
-              {a:'가맹점→포털', t:'원화 환매 신청', d:'건별 즉시 or 일 단위로 묶어서 신청 (안 바꾸고 보유도 가능)'},
-              {a:'포털→발행사', t:'KRWT 소각 요청', d:'소각 권한은 발행사(은행) · 가맹점 코인이 소멸'},
-              {a:'발행 은행→가맹점', t:'원화 이체', d:'예치된 준비자산 → 가맹점 계좌(오픈뱅킹 API) · AML 점검'},
-              {a:'포털→가맹점', t:'"원화 입금 완료"', d:'등록 계좌로 입금 완료 알림'}
+            {h:'2단계 · 사장님이 진짜 돈으로 바꾸기 (원할 때만)', steps:[
+              {a:'신청', t:'원화로 바꿔줘요', d:'받은 디지털 돈을 진짜 원화로 바꿔달라고 신청해요. (그냥 가지고 있어도 돼요)'},
+              {a:'교환', t:'코인은 사라지고', d:'바꾼 만큼의 코인은 없어지고...'},
+              {a:'입금', t:'통장으로 쏙', d:'은행에 보관돼 있던 진짜 원화가 사장님 통장으로 들어가요.'}
             ]}
           ],
-          happen:'겉은 QR 한 번 — 뒤에선 ① 온체인 즉시 결제 ② 가맹점 원화 환매, 2단계로 돕니다',
-          old:{k:'기존 카드', v:'사장님은 2~3일 뒤 정산 + 카드 수수료'},
-          neu:{k:'KRWT', v:'온체인 즉시 정산 · 환매도 가맹점 선택'}, save:0},
-        {time:'오후 12:30', sky:'🌤️', band:'noon', icon:'🍜', title:'점심, 더치페이',
-          ctx:'동료 몫까지 내가 냈고, 바로 정산받기.', delta:+12000, act:'친구가 보내기 → ₩12,000 받기',
-          happen:'친구가 탭 한 번. 1초 만에 내 지갑으로',
-          old:{k:'기존 이체', v:'은행 앱·타행 시간·이체 한도'},
-          neu:{k:'KRWT', v:'1초 · 24시간 · 앱 안에서 바로'}, save:0},
-        {time:'오후 3:00', sky:'🛍️', band:'afternoon', icon:'🛒', title:'오후, 해외 직구',
-          ctx:'미국 쇼핑몰에서 $30 결제.', delta:-41400, act:'$30 결제 (환율 고정 ₩1,380)',
-          happen:'KRWT가 즉시 USD로 환전돼 결제 · 환율은 결제 순간 고정',
-          old:{k:'기존 카드', v:'환전+해외수수료 약 3.5% (≈₩1,450)'},
-          neu:{k:'KRWT', v:'스프레드 절반 (≈₩410) · 환전소 불필요'}, save:1040},
-        {time:'오후 7:00', sky:'🌆', band:'evening', icon:'📺', title:'저녁, 구독료',
-          ctx:'스트리밍 정기결제 ₩9,900.', delta:-9900, act:'자동결제 ₩9,900',
-          happen:'잔액에서 자동 결제 · 프로그래머블이라 조건·한도도 설정 가능',
-          old:{k:'기존 카드', v:'카드 만료·갱신 실패로 끊김 리스크'},
-          neu:{k:'KRWT', v:'잔액 기반 자동 · 영수증 투명'}, save:0},
-        {time:'밤 11:00', sky:'🌙', band:'night', icon:'🌙', title:'밤, 남은 잔액',
-          ctx:'오늘 안 쓴 잔액은 그냥 두기만.', delta:0, earn:true, act:'어닝 켜기',
-          happen:'유휴 잔액에 리워드 적립 (이자가 아니라 리워드형)',
-          old:{k:'기존 통장', v:'수시입출금 이자 0%대'},
-          neu:{k:'KRWT', v:'두기만 해도 리워드가 쌓임'}, save:0}
+          happen:'QR 한 번 찍으면 끝! 카페 사장님 지갑으로 돈이 그 자리에서 들어가요.',
+          old:{k:'😕 지금 (카드)', v:'사장님은 2~3일 뒤에야 돈을 받고, 수수료도 떼여요'},
+          neu:{k:'✅ 디지털 원화', v:'사장님이 바로 그 자리에서 받아요 (수수료도 적어요)'}, save:0},
+        {time:'점심 12:30', sky:'🌤️', band:'noon', icon:'🍜', title:'점심, 더치페이', delta:+12000, act:'친구가 12,000원 보내기',
+          ctx:'점심값을 내가 다 냈어요. 친구가 자기 몫을 바로 보내줘요.',
+          happen:'친구가 버튼 한 번 누르면, 1초 만에 내 지갑으로 쏙 들어와요.',
+          old:{k:'😕 지금 (계좌이체)', v:'은행 앱을 열고, 밤이나 주말엔 늦게 도착하기도 해요'},
+          neu:{k:'✅ 디지털 원화', v:'밤에도 주말에도 1초면 도착해요'}, save:0},
+        {time:'오후 3:00', sky:'🛍️', band:'afternoon', icon:'🛒', title:'오후, 해외 직구', delta:-41400, act:'$30 결제하기',
+          ctx:'미국 인터넷 쇼핑몰에서 3만 원짜리($30)를 샀어요.',
+          happen:'살 때 환율이 딱 정해져서, 나중에 환율이 올라도 더 내지 않아요.',
+          old:{k:'😕 지금 (카드)', v:'환전 수수료가 붙어서 더 비싸요 (약 3.5%)'},
+          neu:{k:'✅ 디지털 원화', v:'수수료가 절반쯤으로 싸고, 환전소에 갈 필요도 없어요'}, save:1040},
+        {time:'저녁 7:00', sky:'🌆', band:'evening', icon:'📺', title:'저녁, 구독료', delta:-9900, act:'자동결제 9,900원',
+          ctx:'매달 내는 영상 구독료 9,900원이 빠져나갈 시간이에요.',
+          happen:'정해진 날에 딱 맞춰 자동으로 빠져나가요. 한 달에 얼마까지만 낼지 내가 정할 수도 있어요.',
+          old:{k:'😕 지금 (카드)', v:'카드가 만료되면 결제가 갑자기 끊기기도 해요'},
+          neu:{k:'✅ 디지털 원화', v:'지갑에서 자동으로, 영수증도 깔끔하게'}, save:0},
+        {time:'밤 11:00', sky:'🌙', band:'night', icon:'🌙', title:'밤, 남은 잔액', delta:0, earn:true, act:'리워드 켜기',
+          ctx:'오늘 안 쓰고 남은 돈. 그냥 지갑에 둘게요.',
+          happen:'쓰지 않고 두기만 해도 포인트(리워드)가 조금씩 쌓여요.',
+          old:{k:'😕 지금 (통장)', v:'그냥 두면 이자가 거의 없어요'},
+          neu:{k:'✅ 디지털 원화', v:'가만히 두기만 해도 리워드가 쌓여요'}, save:0}
       ]
     },
 
     business:{
-      label:'기업·가맹점', icon:'🏪', chip:'B2B · 사업자',
-      walletLabel:'우리 가게/회사 지갑', startBal:5000000, replayLabel:'다시 운영해보기',
-      summaryTitle:'오늘, KRWT로 돌린 비즈니스',
+      label:'기업·가맹점', icon:'🏪', chip:'사업자 · 가게',
+      walletLabel:'우리 가게·회사 지갑', startBal:5000000, replayLabel:'다시 운영해보기',
+      summaryTitle:'오늘, 디지털 원화로 돌린 가게',
       scenes:[
-        {time:'마감 정산', sky:'🧾', band:'biz', icon:'🏪', title:'가맹점 실시간 매출 정산',
-          ctx:'하루 동안 손님들이 KRWT로 결제한 매출이 들어옵니다.', delta:+1250000, act:'오늘 매출 정산하기', type:'qr',
-          phones:'₩1,250,000', phoneLab:'당일 매출',
+        {time:'마감 정산', sky:'🧾', band:'biz', icon:'🏪', title:'하루 매출 한 번에 정산', delta:+1250000, act:'오늘 매출 받기', type:'qr',
+          ctx:'하루 종일 손님들이 디지털 원화로 낸 매출이 들어와요.',
+          phones:'₩1,250,000', phoneLab:'오늘 매출',
           phases:[
-            {h:'단계 1 · 결제 수신 (건별 실시간)', steps:[
-              {a:'손님→가맹점', t:'KRWT 결제 누적', d:'결제 건마다 가맹점 지갑으로 즉시 입금 · 마감 시점엔 이미 다 들어와 있음'},
-              {a:'체인→포털', t:'입금 이벤트 집계', d:'정산 포털이 건별 웹훅을 모아 일 매출·정산 리포트 자동 생성'}
+            {h:'1단계 · 결제될 때마다 바로 입금', steps:[
+              {a:'결제', t:'손님이 낼 때마다', d:'결제가 일어날 때마다 가게 지갑으로 즉시 들어와요. 문 닫을 때쯤이면 이미 다 들어와 있어요.'},
+              {a:'정리', t:'매출 자동 정리', d:'얼마가 들어왔는지 표(리포트)로 자동으로 만들어져요.'}
             ]},
-            {h:'단계 2 · 원화 환매 (필요한 만큼만)', steps:[
-              {a:'가맹점→포털', t:'환매 금액 지정', d:'운영비만 원화로 빼고 나머지는 KRWT로 보유 (현금흐름 자유)'},
-              {a:'포털→발행사', t:'KRWT 소각·원화 이체', d:'발행 은행이 준비자산에서 등록 계좌로 즉시 이체 · AML 점검'},
-              {a:'포털→가맹점', t:'정산 완료·세금계산 데이터', d:'입금 알림 + 회계/부가세 데이터로 바로 연계'}
+            {h:'2단계 · 필요한 만큼만 진짜 원화로', steps:[
+              {a:'선택', t:'필요한 만큼만', d:'당장 쓸 돈만 원화로 바꾸고, 나머지는 디지털 원화로 그냥 둬요.'},
+              {a:'입금', t:'통장으로 즉시', d:'발행한 곳이 보관 중인 진짜 원화를 가게 통장으로 바로 보내줘요.'},
+              {a:'연계', t:'세금 계산도 자동', d:'입금 내역이 회계·부가세 자료로 바로 이어져요.'}
             ]}
           ],
-          happen:'카드처럼 2~3일 기다릴 필요 없이, 마감 순간 이미 자금이 손에 있습니다',
-          old:{k:'기존 카드 정산', v:'T+2~3일 · 카드 수수료 2~3% · PG 차감'},
-          neu:{k:'KRWT', v:'건별 즉시 입금 · 필요한 만큼만 원화 환매'}, save:31000},
-        {time:'급여일', sky:'💸', band:'biz', icon:'👥', title:'직원 24명 급여 일괄 지급',
-          ctx:'월급날. 클릭 한 번으로 전 직원에게 동시 지급.', delta:-3200000, act:'24명에게 일괄 지급', type:'fan',
+          happen:'카드처럼 2~3일 기다릴 필요 없이, 가게 문 닫는 순간 돈이 이미 손에 있어요.',
+          old:{k:'😕 지금 (카드 정산)', v:'2~3일 뒤에 입금되고, 수수료도 2~3% 떼여요'},
+          neu:{k:'✅ 디지털 원화', v:'결제될 때마다 바로 입금 · 필요한 만큼만 원화로'}, save:31000},
+        {time:'급여일', sky:'💸', band:'biz', icon:'👥', title:'직원 24명 월급 한 번에', delta:-3200000, act:'24명에게 한 번에 보내기', type:'fan',
           fanCount:12, fanTop:'24', fanLabel:'명에게 동시',
-          happen:'24건이 동시에 나가 1분 내 전원 입금 · 가스는 회사가 대납(직원은 그대로 받음)',
-          old:{k:'기존 이체', v:'은행 영업시간·건별 한도·타행 지연·이체 수수료'},
-          neu:{k:'KRWT', v:'24시간 · 일괄 멀티전송 · 즉시 도착 · 명세 온체인 투명'}, save:12000},
-        {time:'정산일', sky:'📦', band:'biz', icon:'🤝', title:'공급사 대금 + 조건부 에스크로',
-          ctx:'납품 받은 원재료 대금. 단, 검수 통과 시에만 지급.', delta:-1500000, act:'에스크로 결제 실행',
-          happen:'대금을 스마트컨트랙트에 잠그고, 납품 검수가 확인되면 자동 릴리즈',
-          old:{k:'기존 방식', v:'선입금 후 분쟁 or 외상·어음 · 신뢰 비용'},
-          neu:{k:'KRWT', v:'조건부 에스크로 · 검수 충족 시 자동 지급 · 분쟁 감소'}, save:0},
-        {time:'장 마감', sky:'🏦', band:'biz', icon:'💼', title:'유휴 운전자금 운용',
-          ctx:'다음 매입 전까지 놀고 있는 운전자금.', delta:0, earn:true, earnRate:0.04, act:'트레저리 어닝 켜기',
-          happen:'유휴 잔액에 리워드 적립 · 필요하면 즉시 인출(락업 없음)',
-          old:{k:'기존 법인 통장', v:'수시입출금 사실상 0% · 자금 그냥 잠김'},
-          neu:{k:'KRWT', v:'유동성 유지하면서 리워드 · 현금흐름 효율'}, save:0}
+          happen:'버튼 한 번이면 24명에게 1분 안에 동시 입금! 밤이든 주말이든 상관없어요.',
+          old:{k:'😕 지금 (이체)', v:'은행 영업시간·건당 수수료·다른 은행은 늦게 도착'},
+          neu:{k:'✅ 디지털 원화', v:'24시간 · 한 번에 모두 · 즉시 도착'}, save:12000},
+        {time:'납품 결제', sky:'📦', band:'biz', icon:'🤝', title:'물건 확인되면 자동 결제', delta:-1500000, act:'안전 잠금으로 결제',
+          ctx:'납품 받은 재료 값을 줄 차례. 단, 물건이 제대로 왔는지 확인되면요.',
+          happen:'돈을 "안전 잠금함"에 넣어두고, 물건 검수가 끝나면 자동으로 지급돼요.',
+          old:{k:'😕 지금', v:'먼저 주면 떼일까 걱정, 외상은 믿음에 기대야 해요'},
+          neu:{k:'✅ 디지털 원화', v:'조건이 맞으면 자동 지급 · 다툼이 줄어요'}, save:0},
+        {time:'장 마감', sky:'🏦', band:'biz', icon:'💼', title:'남는 회삿돈 굴리기', delta:0, earn:true, earnRate:0.04, act:'남는 돈 리워드 켜기',
+          ctx:'다음 재료를 살 때까지 잠깐 놀고 있는 회삿돈이 있어요.',
+          happen:'꽁꽁 묶어두지 않아도 리워드가 쌓이고, 필요하면 바로 꺼내 쓸 수 있어요.',
+          old:{k:'😕 지금 (법인 통장)', v:'이자가 거의 0% · 그냥 잠겨 있어요'},
+          neu:{k:'✅ 디지털 원화', v:'언제든 꺼내 쓰면서 리워드까지'}, save:0}
       ]
     },
 
     global:{
-      label:'글로벌 송금·무역', icon:'🌏', chip:'Cross-border',
-      walletLabel:'KRWT 지갑 (글로벌)', startBal:15000000, replayLabel:'다시 보내보기',
-      summaryTitle:'오늘, 국경을 넘은 KRWT',
+      label:'해외 송금·무역', icon:'🌏', chip:'해외 · 국경 너머',
+      walletLabel:'내 지갑 (해외에서도)', startBal:15000000, replayLabel:'다시 보내보기',
+      summaryTitle:'오늘, 국경을 넘은 디지털 원화',
       scenes:[
-        {time:'해외 송금', sky:'✈️', band:'glob', icon:'👨‍👩‍👧', title:'해외 가족에게 송금',
-          ctx:'유학 중인 가족에게 생활비 ₩1,380,000 송금.', delta:-1380000, act:'해외 송금 보내기', type:'fan',
+        {time:'해외 송금', sky:'✈️', band:'glob', icon:'👨‍👩‍👧', title:'해외 가족에게 송금', delta:-1380000, act:'해외로 보내기', type:'fan',
           fanCount:6, fanTop:'✈️', fanLabel:'국경 너머로',
+          ctx:'외국에 사는 가족에게 생활비 138만 원을 보내요.',
           phases:[
-            {h:'단계 1 · 송금 (앱 안에서 끝)', steps:[
-              {a:'사용자→앱', t:'수취 지갑·금액 지정', d:'은행 SWIFT 코드·중개은행 입력 없이 지갑 주소(or 연락처)로 지정'},
-              {a:'앱→블록체인', t:'KRWT 전송', d:'국경 개념 없이 글로벌 동일 네트워크로 즉시 전송 · 주말·심야 무관'}
+            {h:'1단계 · 보내기 (앱 안에서 끝)', steps:[
+              {a:'입력', t:'받는 사람만 고르기', d:'복잡한 은행 코드 없이, 가족의 지갑(또는 연락처)만 고르면 돼요.'},
+              {a:'전송', t:'국경 없이 바로', d:'전 세계가 같은 길로 연결돼 있어서, 주말·밤에도 바로 보내져요.'}
             ]},
-            {h:'단계 2 · 현지 수령 (선택)', steps:[
-              {a:'수취인', t:'KRWT 보유 or 현지통화 환전', d:'그대로 보유하거나, 현지 파트너/거래소에서 현지통화로 오프램프'},
-              {a:'규제', t:'AML/CFT·여행규칙', d:'송수신 VASP가 신원·한도 점검 (Travel Rule) · 규제 준수 위에서 동작'}
+            {h:'2단계 · 가족이 받기', steps:[
+              {a:'수령', t:'그대로 쓰거나 환전', d:'가족은 디지털 원화 그대로 쓰거나, 현지 돈으로 바꿀 수 있어요.'},
+              {a:'안전', t:'규칙을 지키며', d:'누가 보내고 받는지 확인하는 안전 규칙 안에서 움직여요.'}
             ]}
           ],
-          happen:'SWIFT 2~3일·중개은행 수수료 대신, 1분 내 도착 · 수수료는 한 자릿수 천원대',
-          old:{k:'기존 해외송금', v:'2~3 영업일 · 송금+중개+수취 수수료 ≈₩45,000 · 영업시간'},
-          neu:{k:'KRWT', v:'1분 내 · 수수료 ≈₩2,000 · 24시간 · 추적 투명'}, save:43000},
-        {time:'무역 결제', sky:'🚢', band:'glob', icon:'📑', title:'수입 대금 결제 (무역)',
-          ctx:'해외 공급사에 수입 대금 $10,000(≈₩13,800,000) 결제.', delta:-13800000, act:'무역 대금 결제 (에스크로)',
-          happen:'선적서류 확인을 조건으로 스마트컨트랙트 에스크로 · 신용장(L/C) 절차를 코드로 압축',
-          old:{k:'기존 L/C', v:'개설 수수료·서류 왕복·수일~수주 · 은행 다단계'},
-          neu:{k:'KRWT', v:'조건부 에스크로 · 서류 충족 시 자동 결제 · 비용·기간 압축'}, save:0},
-        {time:'환 관리', sky:'📈', band:'glob', icon:'🛡️', title:'환율 고정 & 정산',
-          ctx:'결제 시점 환율을 고정해 환변동 위험 제거.', delta:0, act:'환율 고정 확인',
-          happen:'결제 순간 환율을 락 · 원화 기준 회계가 그대로 유지돼 환차손 노출이 줄어듭니다',
-          old:{k:'기존 방식', v:'결제일까지 환변동 노출 · 헤지 비용·복잡'},
-          neu:{k:'KRWT', v:'결제 순간 환율 고정 · 원화 기준 정산 단순'}, save:0},
-        {time:'마감', sky:'🌙', band:'glob', icon:'💹', title:'해외 보유 잔액 운용',
-          ctx:'다음 결제 전까지 대기 중인 글로벌 자금.', delta:0, earn:true, earnRate:0.04, act:'어닝 켜기',
-          happen:'대기 자금에 리워드 적립 · 글로벌 어디서든 동일하게 보유·운용',
-          old:{k:'기존 외화 계좌', v:'외화 예치 저금리 · 환전·관리 번거로움'},
-          neu:{k:'KRWT', v:'원화 가치 유지 + 리워드 · 즉시 가용'}, save:0}
+          happen:'은행 해외송금은 2~3일 걸리지만, 이건 1분 안에 도착하고 수수료도 아주 적어요.',
+          old:{k:'😕 지금 (해외송금)', v:'2~3일 걸리고 · 수수료가 약 45,000원이나 들어요'},
+          neu:{k:'✅ 디지털 원화', v:'1분 안에 도착 · 수수료는 약 2,000원'}, save:43000},
+        {time:'무역 결제', sky:'🚢', band:'glob', icon:'📑', title:'수입 대금 결제', delta:-13800000, act:'안전 잠금으로 결제',
+          ctx:'해외 거래처에 수입 대금 1,380만 원어치($10,000)를 결제해요.',
+          happen:'서류 확인을 조건으로 "안전 잠금함"에 돈을 넣어, 복잡하고 긴 무역 절차를 짧게 줄여요.',
+          old:{k:'😕 지금 (신용장)', v:'서류가 오가고 수수료도 많고 며칠~몇 주 걸려요'},
+          neu:{k:'✅ 디지털 원화', v:'조건이 맞으면 자동 결제 · 비용과 시간을 아껴요'}, save:0},
+        {time:'환율 관리', sky:'📈', band:'glob', icon:'🛡️', title:'환율 미리 고정하기', delta:0, act:'환율 고정 확인',
+          ctx:'결제할 때의 환율을 미리 딱 정해 둬요.',
+          happen:'결제하는 순간 환율이 고정돼서, 나중에 환율이 변해도 손해를 보지 않아요.',
+          old:{k:'😕 지금', v:'결제하는 날까지 환율이 출렁여서 위험해요'},
+          neu:{k:'✅ 디지털 원화', v:'결제 순간 환율 고정 · 계산이 단순해요'}, save:0},
+        {time:'마감', sky:'🌙', band:'glob', icon:'💹', title:'해외에 둔 돈 굴리기', delta:0, earn:true, earnRate:0.04, act:'리워드 켜기',
+          ctx:'다음 결제 때까지 기다리고 있는 해외 자금이 있어요.',
+          happen:'세계 어디서나 똑같이 보관하면서 리워드도 함께 쌓을 수 있어요.',
+          old:{k:'😕 지금 (외화통장)', v:'이자가 낮고 · 환전·관리가 번거로워요'},
+          neu:{k:'✅ 디지털 원화', v:'원화 가치 유지 + 리워드 · 바로 사용'}, save:0}
       ]
     },
 
     regulation:{
-      label:'규제·발행 관점', icon:'🏛️', chip:'제도 · 신뢰', infoMode:true,
-      walletLabel:'원화 스테이블코인 · 신뢰 구조', tagline:'누가 발행하고, 무엇이 가치를 보장하나',
+      label:'안전하게 믿을 수 있을까?', icon:'🏛️', chip:'안전 · 믿음', infoMode:true,
+      walletLabel:'디지털 원화는 안전할까?', tagline:'누가 만들고, 진짜 1원으로 바꿀 수 있을까?',
       startBal:0, replayLabel:'다시 살펴보기',
-      summaryTitle:'신뢰가 받치는 원화 스테이블코인',
+      summaryTitle:'믿을 수 있어야 진짜 돈이 돼요',
       scenes:[
-        {time:'쟁점 ①', sky:'🏦', band:'biz', icon:'🏛️', title:'누가 발행하나', type:'info',
-          ctx:'은행이냐, 빅테크·카드사냐 — 발행 주체 논쟁.',
-          happen:'신뢰의 핵심은 "누가 발행하느냐"보다 준비자산·상환보장·감독 설계입니다',
-          old:{k:'쟁점', v:'비은행 발행 시 예금 잠식·통화정책 교란 우려 / 은행 발행 시 혁신 속도 우려'},
-          neu:{k:'설계 방향', v:'인가받은 발행사 · 발행·유통·지갑 역할 분리 · 준비자산 분리예치'},
+        {time:'궁금증 ①', sky:'🏦', band:'biz', icon:'🏛️', title:'이 돈은 누가 만들까?', type:'info',
+          ctx:'디지털 원화는 누가 만들까요? 은행? 아니면 큰 회사?',
+          happen:'중요한 건 "누가 만드냐"보다, 진짜 돈으로 바꿔주는 약속과 이를 지켜보는 감시가 있느냐예요.',
+          old:{k:'⚠️ 걱정', v:'아무나 만들면 안전할까요? 돈 관리가 어려워질 수 있어요'},
+          neu:{k:'✅ 이렇게 만들어요', v:'허가받은 곳만 만들고, 진짜 돈은 따로 안전하게 보관해요'},
           phases:[
-            {h:'발행이 신뢰를 얻는 구조', steps:[
-              {a:'인가', t:'라이선스 기반 발행', d:'감독당국 인가를 받은 발행사만 발행 · 자본·내부통제 요건'},
-              {a:'분리', t:'준비자산 분리예치', d:'발행액 = 준비자산 · 신탁/분리보관으로 발행사 도산과 절연'},
-              {a:'권리', t:'1:1 상환청구권', d:'보유자는 언제든 1원=1KRWT 원화 상환을 법적으로 청구'},
-              {a:'검증', t:'감사·공시', d:'외부감사·정기 공시로 준비자산을 제3자가 검증'}
+            {h:'어떻게 믿을 수 있게 만들까', steps:[
+              {a:'허가', t:'허가받은 곳만', d:'나라의 허락을 받은 회사만 디지털 원화를 만들 수 있어요.'},
+              {a:'분리', t:'진짜 돈은 따로 보관', d:'만든 만큼의 진짜 돈을 따로 떼어 안전하게 맡겨둬요. 회사가 망해도 안전해요.'},
+              {a:'약속', t:'언제든 1원으로', d:'원하면 언제든 1코인을 진짜 1원으로 바꿔주기로 약속돼 있어요.'},
+              {a:'검사', t:'다른 곳이 검사', d:'진짜 돈이 잘 있는지 바깥 전문가가 정기적으로 확인하고 알려줘요.'}
             ]}
           ]},
-        {time:'쟁점 ②', sky:'🪙', band:'biz', icon:'🛡️', title:'무엇이 가치를 보장하나', type:'info',
-          ctx:'1원 = 1KRWT, 그 1원은 어디에 있나.',
-          happen:'1원=1KRWT는 "믿음"이 아니라 준비자산에 대한 "상환청구권"으로 보장됩니다',
-          old:{k:'우려', v:'알고리즘·부분준비형의 디페깅 리스크 (테라 붕괴, USDC 일시 디페그 사례)'},
-          neu:{k:'설계 방향', v:'현금성 자산 1:1 풀백 · 신탁 분리보관 · 정기 감사/공시 · 즉시 상환'},
+        {time:'궁금증 ②', sky:'🪙', band:'biz', icon:'🛡️', title:'1코인이 정말 1원일까?', type:'info',
+          ctx:'1코인 = 1원이라는데, 그 1원은 도대체 어디에 있을까요?',
+          happen:'1코인을 만들 때마다 진짜 1원을 은행에 똑같이 보관해요. 그래서 언제든 1원으로 바꿔줄 수 있어요.',
+          old:{k:'⚠️ 걱정', v:'진짜 돈 없이 코인만 찍어내면 값이 무너질 수 있어요'},
+          neu:{k:'✅ 이렇게 만들어요', v:'1코인마다 진짜 1원을 보관 · 언제든 바꿔줘요'},
           phases:[
-            {h:'준비자산이 작동하는 방식', steps:[
-              {a:'구성', t:'현금성 자산 1:1', d:'예치금·단기 국공채 등 안전·유동 자산으로 100% 이상 백업'},
-              {a:'보관', t:'분리보관(신탁)', d:'발행사 고유재산과 분리 → 도산 시에도 보유자 자산 보호'},
-              {a:'검증', t:'정기 어테스테이션', d:'감사인의 준비자산 보고서를 주기적으로 공시'},
-              {a:'상환', t:'환매 → 소각 → 지급', d:'상환 요청 시 KRWT 소각 후 등록 계좌로 원화 지급'}
+            {h:'1원의 가치를 지키는 방법', steps:[
+              {a:'보관', t:'진짜 돈을 똑같이', d:'코인을 만든 만큼 진짜 원화(또는 아주 안전한 자산)를 그대로 보관해요.'},
+              {a:'분리', t:'섞이지 않게 따로', d:'회사 돈과 섞지 않고 따로 맡겨둬서, 회사가 어려워져도 내 돈은 지켜져요.'},
+              {a:'공개', t:'잘 있는지 공개', d:'얼마나 보관돼 있는지 정기적으로 확인해서 사람들에게 알려줘요.'},
+              {a:'교환', t:'바꿔달라면 바로', d:'바꿔달라고 하면 코인은 없애고, 보관해둔 진짜 원화를 내줘요.'}
             ]}
           ]},
-        {time:'쟁점 ③', sky:'⚖️', band:'glob', icon:'🔐', title:'이용자는 어떻게 보호되나', type:'info',
-          ctx:'해킹·도난·파산이 나면 내 돈은?',
-          happen:'"돈"으로 쓰이려면 결제 UX만큼 이용자 보호·규제 준수가 전제입니다',
-          old:{k:'공백 우려', v:'보관 중 해킹·도난·발행사 파산 시 소비자 보호 장치 미비'},
-          neu:{k:'제도 기반', v:'가상자산이용자보호법(2024.7) · 실명확인·트래블룰 · 콜드월렛·보험·배상'},
+        {time:'궁금증 ③', sky:'⚖️', band:'glob', icon:'🔐', title:'잃어버리면 어떡하지?', type:'info',
+          ctx:'해킹당하거나 만든 회사가 망하면, 내 돈은 어떻게 될까요?',
+          happen:'돈으로 쓰이려면, 사고가 나도 지켜주는 법과 보험이 꼭 함께 있어야 해요.',
+          old:{k:'⚠️ 걱정', v:'해킹·도난·회사 부도 때 지켜줄 장치가 없으면 위험해요'},
+          neu:{k:'✅ 이렇게 지켜요', v:'이용자 보호법 · 본인 확인 · 보험으로 지켜줘요'},
           phases:[
-            {h:'이용자 보호 · AML 흐름', steps:[
-              {a:'KYC', t:'실명확인', d:'실명계좌·신원확인 기반 발급 · 한도·연령 정책'},
-              {a:'트래블룰', t:'VASP 간 정보공유', d:'일정액 이상 송수신 시 송·수신자 정보 공유로 자금세탁 차단'},
-              {a:'자산보호', t:'콜드월렛·보험·준비금', d:'대부분 오프라인 보관 + 사고 대비 보험/준비금'},
-              {a:'구제', t:'분쟁·배상 절차', d:'사고·오류 시 배상·구제 프로세스 명문화'}
+            {h:'이용자를 지키는 방법', steps:[
+              {a:'확인', t:'본인 확인', d:'누구인지 확인하고 만들어줘서, 나쁜 사람이 함부로 못 써요.'},
+              {a:'추적', t:'주고받기 확인', d:'큰 금액을 주고받을 땐 누가 보내고 받는지 확인해 나쁜 돈을 걸러내요.'},
+              {a:'보관', t:'안전 금고 + 보험', d:'대부분을 인터넷과 끊긴 안전한 곳에 보관하고, 사고에 대비해 보험도 들어요.'},
+              {a:'구제', t:'잘못되면 보상', d:'문제가 생기면 보상해주는 절차가 법으로 정해져 있어요.'}
             ]}
           ]},
-        {time:'쟁점 ④', sky:'🌐', band:'glob', icon:'🏛️', title:'CBDC와 무엇이 다른가', type:'info',
-          ctx:'한국은행 CBDC와 민간 스테이블코인, 경쟁일까.',
-          happen:'한국에선 한은 CBDC 실험과 민간 스테이블코인이 경쟁이 아니라 보완으로 공존할 수 있습니다',
-          old:{k:'CBDC (공공)', v:'중앙은행 직접 발행 · 공공 인프라 · 프라이버시·통제 논쟁, 혁신 속도 한계'},
-          neu:{k:'스테이블코인 (민간)', v:'프로그래머빌리티·속도·서비스 경쟁 · 신뢰는 준비자산·규제로 보강'}}
+        {time:'궁금증 ④', sky:'🌐', band:'glob', icon:'🏛️', title:'나라가 만든 돈과 뭐가 다를까?', type:'info',
+          ctx:'한국은행 같은 나라가 만드는 디지털 돈(CBDC)과는 뭐가 다를까요?',
+          happen:'나라가 만든 디지털 돈과 회사가 만든 디지털 원화는 서로 싸우는 게 아니라, 함께 쓰일 수 있어요.',
+          old:{k:'🏛️ 나라가 만든 돈 (CBDC)', v:'중앙은행이 직접 만들어요 · 공공의 기본 돈'},
+          neu:{k:'🏢 회사가 만든 디지털 원화', v:'빠르고 다양한 서비스 · 정해진 규칙 안에서 함께 사용'}}
       ]
     }
   };
@@ -431,14 +434,14 @@
     if(st && st.earnT){clearInterval(st.earnT);st.earnT=null;}
     st=null;
     var cards=[
-      {key:'personal', cls:'', tags:['카페 결제','더치페이','해외직구','구독','어닝'],
-        desc:'아침 카페부터 밤 잔액까지, 한 사람의 하루를 KRWT로 따라가기'},
-      {key:'business', cls:'biz', tags:['실시간 정산','급여 일괄지급','B2B 에스크로','트레저리'],
-        desc:'가맹점 정산·급여·공급망 대금·운전자금까지, 사업자의 자금 흐름'},
-      {key:'global', cls:'glob', tags:['해외송금','무역결제','환율 고정','글로벌 운용'],
-        desc:'국경을 넘는 송금과 무역 대금을, 며칠이 아니라 1분으로'},
-      {key:'regulation', cls:'reg', tags:['발행 주체','준비자산','이용자보호법','CBDC 비교'],
-        desc:'누가 발행하고 무엇이 가치를 보장하나 — 한국의 규제·신뢰 관점'}
+      {key:'personal', cls:'', tags:['카페 결제','더치페이','해외직구','구독','리워드'],
+        desc:'아침 카페부터 밤까지, 한 사람의 하루를 디지털 원화로 따라가요'},
+      {key:'business', cls:'biz', tags:['매출 정산','월급 지급','안전 결제','남는 돈 굴리기'],
+        desc:'가게 매출·직원 월급·납품 대금까지, 사업자의 돈 흐름이 어떻게 빨라지는지'},
+      {key:'global', cls:'glob', tags:['해외 송금','무역 결제','환율 고정','해외 운용'],
+        desc:'해외로 보내는 돈과 무역 대금을, 며칠이 아니라 1분 만에'},
+      {key:'regulation', cls:'reg', tags:['누가 만드나','1코인=1원','내 돈 보호','나라 돈과 비교'],
+        desc:'정말 안전할까? 누가 만들고, 진짜 1원으로 바꿀 수 있는지 알아봐요'}
     ];
     var html='<div class="hub">';
     cards.forEach(function(c){
@@ -462,12 +465,12 @@
     var m=MODES[modeKey];
     var balBlock = m.infoMode
       ? '<div class="bal" style="font-size:18px;line-height:1.35;max-width:30ch">'+m.tagline+'</div>'
-      : '<div class="bal"><span class="num" id="bal">'+fmt(m.startBal)+'</span><span class="u">KRWT</span></div>';
+      : '<div class="bal"><span class="num" id="bal">'+fmt(m.startBal)+'</span><span class="u">KRWS</span></div>';
     $('root').innerHTML=
       '<div class="device">'
       + '<div class="top" id="top">'
-        + '<div class="modeChip" id="modeChip"></div>'
-        + '<button class="toHub" id="toHub">← 허브</button>'
+        + '<div class="topBar"><div class="modeChip" id="modeChip"></div>'
+          + '<button class="toHub" id="toHub">← 허브</button></div>'
         + '<div class="row"><span class="time" id="time"></span><span class="sky" id="sky"></span></div>'
         + '<div class="bWrap"><div class="bLab" id="bLab"></div>'
           + balBlock + '</div>'
@@ -513,7 +516,7 @@
     return '<div class="qrStage" id="qrStage">'
       + '<div class="counter"><div class="qrPlate"><div class="qrGrid">'+cells+'</div>'
         + '<div class="scanline"></div><div class="qrDone">✓</div></div><div class="cLabel">'+(sc.qrLabel||'QR')+'</div></div>'
-      + '<div class="phone" id="phone"><div class="pScreen"><div class="pAmt">'+(sc.phones||'')+'</div><div class="pLab">'+(sc.phoneLab||'KRWT')+'</div></div></div>'
+      + '<div class="phone" id="phone"><div class="pScreen"><div class="pAmt">'+(sc.phones||'')+'</div><div class="pLab">'+(sc.phoneLab||'KRWS')+'</div></div></div>'
       + '</div>';
   }
   function fanStage(sc){
@@ -542,7 +545,7 @@
           + '<div class="bd">'+b.d+'</div></div></div>';
       });
     });
-    return '<div class="backend" id="backend"><div class="bHead">백단에서 실제로 일어나는 일</div>'
+    return '<div class="backend" id="backend"><div class="bHead">뒤에서 일어나는 일</div>'
       + '<div id="bSteps">'+blocks+'</div></div>';
   }
 
@@ -553,20 +556,18 @@
     var inner, hasBackend=!!sc.phases;
     var actClass='act'+(sc.earn?' gold':''), actLabel=sc.act;
     if(sc.type==='qr'){
-      inner = '<div class="topVs">'+vsCards(sc)+'</div>'
-        + '<div class="happen happenTop">'+sc.happen+'</div>'
-        + qrStage(sc)
-        + (hasBackend?'<button class="reveal" id="revealBtn">실제 운영 방법 보기 ▾</button>'+backendHTML(sc):'');
+      inner = qrStage(sc)
+        + '<div class="benefit" id="benefit"><div class="happen">'+sc.happen+'</div>'+vsCards(sc)+'</div>'
+        + (hasBackend?'<button class="reveal" id="revealBtn">뒤에서 어떻게 되는지 보기 ▾</button>'+backendHTML(sc):'');
     } else if(sc.type==='fan'){
-      inner = '<div class="topVs">'+vsCards(sc)+'</div>'
-        + '<div class="happen happenTop">'+sc.happen+'</div>'
-        + fanStage(sc)
-        + (hasBackend?'<button class="reveal" id="revealBtn">실제 운영 방법 보기 ▾</button>'+backendHTML(sc):'');
+      inner = fanStage(sc)
+        + '<div class="benefit" id="benefit"><div class="happen">'+sc.happen+'</div>'+vsCards(sc)+'</div>'
+        + (hasBackend?'<button class="reveal" id="revealBtn">뒤에서 어떻게 되는지 보기 ▾</button>'+backendHTML(sc):'');
     } else if(sc.type==='info'){
       actClass='act next'; actLabel=nextLabel();
       inner = '<div class="happen happenTop">'+sc.happen+'</div>'
         + '<div class="topVs">'+vsCards(sc)+'</div>'
-        + (hasBackend?'<button class="reveal on" id="revealBtn">실제 작동 구조 보기 ▾</button>'+backendHTML(sc):'');
+        + (hasBackend?'<button class="reveal on" id="revealBtn">어떻게 그렇게 되는지 보기 ▾</button>'+backendHTML(sc):'');
     } else {
       var amtTxt = sc.delta>0?('+'+fmt(sc.delta)):(sc.delta<0?('−'+fmt(-sc.delta)):'');
       var amtColor = sc.delta>0?'var(--jade-deep)':'var(--con)';
@@ -586,7 +587,7 @@
   function toggleBackend(){
     var b=$('backend'), btn=$('revealBtn');
     var open=b.classList.toggle('show');
-    btn.textContent = open ? '실제 운영 방법 닫기 ▴' : '실제 운영 방법 보기 ▾';
+    btn.textContent = open ? '접기 ▴' : '뒤에서 어떻게 되는지 보기 ▾';
     if(open && !st.backendShown){
       st.backendShown=true;
       var steps=b.querySelectorAll('.bStep');
@@ -647,6 +648,7 @@
   function afterAnimated(sc){
     if(sc.save) st.saved+=sc.save;
     if(sc.earn) startEarn(sc);
+    var bf=$('benefit'); if(bf) bf.classList.add('show');
     var rb=$('revealBtn'); if(rb) rb.classList.add('on');
     var btn=$('act'); btn.className='act next'; btn.textContent=nextLabel();
     st.animating=false;
@@ -661,24 +663,24 @@
     var txCount=st.pays+st.recvCount;
     var savedTxt = st.saved>0 ? '₩'+fmt(st.saved) : '수수료·시간';
     var monthTxt = st.mode==='personal'
-      ? '한 달이면 어닝만 약 ₩'+fmt(rew*30)+'.'
+      ? '한 달이면 리워드만 약 ₩'+fmt(rew*30)+' 쌓여요.'
       : (st.mode==='business'
-        ? '카드 정산 대기·수수료·이체 한도가 사라지고, 자금이 마감 순간 손에 있습니다.'
-        : '며칠 걸리던 국경 송금이 1분으로 — 수수료·환변동·영업시간 제약이 사라집니다.');
+        ? '정산을 기다리거나 수수료를 떼이는 일이 사라지고, 가게 문 닫는 순간 돈이 손에 있어요.'
+        : '며칠 걸리던 해외 송금이 1분으로 — 수수료·환율 걱정·영업시간 제약이 사라져요.');
     var note = st.mode==='personal'
-      ? '카페·해외직구·구독은 즉시 결제됐고, 친구 정산은 1초, 환전소도 영업시간도 필요 없었습니다. 남은 잔액엔 리워드가 쌓이고요. '+monthTxt
+      ? '카페·해외직구·구독은 바로 결제됐고, 친구한테 받는 건 1초, 환전소도 영업시간도 필요 없었어요. 남은 돈엔 리워드가 쌓이고요. '+monthTxt
       : (st.mode==='business'
-        ? '매출은 마감 순간 정산, 급여 24명은 1분 내 일괄, 공급사 대금은 조건부 에스크로로 안전하게. 유휴 자금엔 리워드까지. '+monthTxt
-        : '가족 송금은 1분, 무역 대금은 조건부 에스크로, 환율은 결제 순간 고정. '+monthTxt);
+        ? '매출은 문 닫는 순간 정산, 직원 24명 월급은 1분 만에 한 번에, 납품 대금은 조건이 맞으면 자동으로. 남는 돈엔 리워드까지. '+monthTxt
+        : '가족 송금은 1분, 무역 대금은 안전 잠금, 환율은 결제 순간 고정. '+monthTxt);
 
     $('stage').innerHTML =
       '<div class="sum">'
       + '<h2>'+m.summaryTitle+'</h2>'
       + '<div class="grid">'
         + scard(st.mode==='business'?'정산·지급·결제':'결제·송금', txCount+'건', false)
-        + scard('정산 속도', '모두 즉시', true)
+        + scard('걸린 시간', '모두 즉시', true)
         + scard('아낀 비용', savedTxt, true)
-        + scard('어닝 적립', '+₩'+fmt(rew)+'/일', true)
+        + scard('쌓인 리워드', '+₩'+fmt(rew)+'/일', true)
       + '</div>'
       + '<div class="sumNote">'+note+'</div>'
       + '<div class="sumBtns">'
@@ -696,12 +698,12 @@
       '<div class="sum">'
       + '<h2>'+m.summaryTitle+'</h2>'
       + '<div class="grid">'
-        + scard('발행', '인가 발행', true)
-        + scard('가치 보장', '준비자산 1:1', true)
-        + scard('이용자 보호', '법·트래블룰', true)
-        + scard('CBDC와', '보완 공존', true)
+        + scard('누가 만드나', '허가받은 곳', true)
+        + scard('1코인의 가치', '진짜 1원', true)
+        + scard('내 돈 보호', '법·보험', true)
+        + scard('나라 돈과', '함께 사용', true)
       + '</div>'
-      + '<div class="sumNote">원화 스테이블코인이 "돈"으로 자리잡으려면 빠른 결제 경험만큼이나 ① 인가받은 발행 ② 준비자산 1:1·상환보장 ③ 이용자보호법·AML ④ CBDC와의 역할 분담이 받쳐줘야 합니다. 결국 <b>경험 설계와 신뢰 설계는 한 몸</b>입니다.</div>'
+      + '<div class="sumNote">디지털 원화가 진짜 "돈"이 되려면, 빠르고 편한 것만으로는 부족해요. ① 허가받은 곳이 만들고 ② 1코인마다 진짜 1원을 보관하고 ③ 사고가 나도 법과 보험으로 지켜주고 ④ 나라가 만든 돈과도 잘 어울려야 해요. <b>편리함과 믿음은 함께 가야</b> 진짜 돈이 됩니다.</div>'
       + '<div class="sumBtns">'
         + '<button class="act next" id="toHub2">다른 모드 보기</button>'
         + '<button class="act" id="replay">'+m.replayLabel+'</button>'
