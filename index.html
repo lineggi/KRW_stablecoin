@@ -211,7 +211,7 @@
 
   <span class="eyebrow"><span class="dot"></span>원화 스테이블코인 · 활용 시뮬레이터</span>
   <h1>원화 스테이블코인은<br><b>어디에 어떻게</b> 쓰일까?</h1>
-  <p class="sub">디지털 원화(원화 스테이블코인)가 우리 생활에서 어떻게 쓰일지, 장면을 하나씩 따라가며 쉽게 볼 수 있어요. 빨간 칸은 <b>지금 방식</b>, 초록 칸은 <b>디지털 원화로 바뀌면</b> 어떻게 되는지예요.</p>
+  <p class="sub">디지털 원화(원화 스테이블코인)가 우리 생활에서 어떻게 쓰일지, 장면을 하나씩 따라가며 쉽게 볼 수 있어요.<br>빨간 칸은 <b>지금 방식</b>, 초록 칸은 <b>디지털 원화로 바뀌면</b> 어떻게 되는지예요.</p>
 
   <div id="root"></div>
 
@@ -227,6 +227,8 @@
   var reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   var $=function(id){return document.getElementById(id);};
   var fmt=function(n){return Math.round(n).toLocaleString('ko-KR');};
+  // 문장이 끝나는 곳(. ? !)에서 줄바꿈 — 숫자의 쉼표는 건드리지 않음
+  var brk=function(t){return String(t).replace(/([.?!])\s+/g,'$1<br>');};
 
   var SKY={
     morning:'linear-gradient(165deg,#E8923D,#C76B2E)',
@@ -510,9 +512,8 @@
     return '<div class="vs"><div class="vsBox old"><div class="k">'+sc.old.k+'</div><div class="v">'+sc.old.v+'</div></div>'
       + '<div class="vsBox neu"><div class="k">'+sc.neu.k+'</div><div class="v">'+sc.neu.v+'</div></div></div>';
   }
-  function diffBlock(sc){
-    var label = (sc.vsTitle!==undefined) ? sc.vsTitle : '💡 지금이랑 뭐가 다를까?';
-    return '<div class="happen">'+sc.happen+'</div>'
+  function diffBlock(sc){    var label = (sc.vsTitle!==undefined) ? sc.vsTitle : '💡 지금이랑 뭐가 다를까?';
+    return '<div class="happen">'+brk(sc.happen)+'</div>'
       + (label ? '<div class="vsLabel">'+label+'</div>' : '')
       + vsCards(sc);
   }
@@ -548,7 +549,7 @@
       ph.steps.forEach(function(b){ idx++;
         blocks += '<div class="bStep"><span class="bn">'+idx+'</span><div>'
           + '<div class="bt"><span class="ba">'+b.a+'</span>'+b.t+'</div>'
-          + '<div class="bd">'+b.d+'</div></div></div>';
+          + '<div class="bd">'+brk(b.d)+'</div></div></div>';
       });
     });
     return '<div class="backend" id="backend"><div class="bHead">뒤에서 일어나는 일</div>'
@@ -571,7 +572,7 @@
         + (hasBackend?'<button class="reveal" id="revealBtn">뒤에서 어떻게 되는지 보기 ▾</button>'+backendHTML(sc):'');
     } else if(sc.type==='info'){
       actClass='act next'; actLabel=nextLabel();
-      inner = '<div class="happen happenTop">'+sc.happen+'</div>'
+      inner = '<div class="happen happenTop">'+brk(sc.happen)+'</div>'
         + '<div class="topVs">'+vsCards(sc)+'</div>'
         + (hasBackend?'<button class="reveal on" id="revealBtn">어떻게 그렇게 되는지 보기 ▾</button>'+backendHTML(sc):'');
     } else {
@@ -583,7 +584,7 @@
         + '<div class="benefit" id="benefit">'+diffBlock(sc)+'</div>';
     }
     $('stage').innerHTML='<div class="scene"><div class="sIcon">'+sc.icon+'</div>'
-      + '<div class="sTitle">'+sc.title+'</div><div class="sCtx">'+sc.ctx+'</div>'
+      + '<div class="sTitle">'+sc.title+'</div><div class="sCtx">'+brk(sc.ctx)+'</div>'
       + inner
       + '<button class="'+actClass+'" id="act">'+actLabel+'</button></div>';
     $('act').addEventListener('click',onAct);
@@ -689,7 +690,7 @@
         + scard('아낀 비용', savedTxt, true)
         + scard('쌓인 리워드', '+₩'+fmt(rew)+'/일', true)
       + '</div>'
-      + '<div class="sumNote">'+note+'</div>'
+      + '<div class="sumNote">'+brk(note)+'</div>'
       + '<div class="sumBtns">'
         + '<button class="act next" id="toHub2">다른 모드 보기</button>'
         + '<button class="act" id="replay">'+m.replayLabel+'</button>'
@@ -710,7 +711,7 @@
         + scard('내 돈 보호', '법·보험', true)
         + scard('나라 돈과', '함께 사용', true)
       + '</div>'
-      + '<div class="sumNote">디지털 원화가 진짜 "돈"이 되려면, 빠르고 편한 것만으로는 부족해요. ① 허가받은 곳이 만들고 ② 1코인마다 진짜 1원을 보관하고 ③ 사고가 나도 법과 보험으로 지켜주고 ④ 나라가 만든 돈과도 잘 어울려야 해요. <b>편리함과 믿음은 함께 가야</b> 진짜 돈이 됩니다.</div>'
+      + '<div class="sumNote">'+brk('디지털 원화가 진짜 "돈"이 되려면, 빠르고 편한 것만으로는 부족해요. ① 허가받은 곳이 만들고 ② 1코인마다 진짜 1원을 보관하고 ③ 사고가 나도 법과 보험으로 지켜주고 ④ 나라가 만든 돈과도 잘 어울려야 해요. <b>편리함과 믿음은 함께 가야</b> 진짜 돈이 됩니다.')+'</div>'
       + '<div class="sumBtns">'
         + '<button class="act next" id="toHub2">다른 모드 보기</button>'
         + '<button class="act" id="replay">'+m.replayLabel+'</button>'
