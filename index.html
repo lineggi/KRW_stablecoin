@@ -20,9 +20,10 @@
     --f:'Pretendard',system-ui,sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   body{font-family:var(--f);background:radial-gradient(120% 80% at 50% -10%,#F7FAF8 0%,var(--paper) 55%) fixed;
     color:var(--ink);-webkit-font-smoothing:antialiased;display:flex;justify-content:center;
-    padding:24px 16px 40px;line-height:1.5;word-break:keep-all;overflow-wrap:break-word}
+    padding:24px 16px 40px;line-height:1.5;word-break:keep-all;overflow-wrap:break-word;overflow-x:hidden}
   .stage{width:100%;max-width:412px}
   .num{font-variant-numeric:tabular-nums}
 
@@ -203,6 +204,30 @@
   .frame .lab{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#5BE0A8;font-weight:700}
   .frame p{font-size:12px;margin-top:6px;line-height:1.55;color:#BACFC6}
   .frame b{color:#fff}
+
+  /* 반응형 — 작은 화면 최적화 */
+  @media (max-width:430px){
+    body{padding:16px 13px calc(30px + env(safe-area-inset-bottom))}
+  }
+  @media (max-width:360px){
+    h1{font-size:21px;line-height:1.28}
+    .sub{font-size:12.5px}
+    .device{border-radius:24px}
+    .top{padding:14px 15px 13px}
+    .bal{font-size:27px}
+    .scene{padding:18px 15px 8px}
+    .sum{padding:18px 15px}
+    .foot{padding:4px 15px 16px}
+    .sIcon{font-size:32px}
+    .sTitle{font-size:18px}
+    .sCtx{font-size:13.5px}
+    .happen{font-size:13.5px;padding:10px 11px}
+    .vsBox{padding:11px 11px}
+    .vsBox .v{font-size:12.5px}
+    .scard{padding:12px 11px}
+    .scard .v{font-size:16.5px}
+    .qrStage,.fanStage{height:108px}
+  }
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
