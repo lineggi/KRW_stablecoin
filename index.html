@@ -295,8 +295,19 @@
   var fmt=function(n){return Math.round(n).toLocaleString('ko-KR');};
   // 문장이 끝나는 곳(. ? !)에서 줄바꿈 — 숫자의 쉼표는 건드리지 않음
   var brk=function(t){ if(t==null) return ''; t=String(t); if(t.indexOf('<br>')>=0) return t; return t.replace(/([.?!])\s+/g,'$1<br>'); };
-  // 새로 나타난 내용을 보도록 페이지 맨 아래로 부드럽게 스크롤
-  function scrollBottom(){ setTimeout(function(){ var h=Math.max(document.documentElement.scrollHeight, document.body.scrollHeight); try{ window.scrollTo({top:h, behavior:reduce?'auto':'smooth'}); }catch(e){ window.scrollTo(0,h); } }, 120); }
+  // 새로 나타난 내용을 보도록 페이지 맨 아래로 부드럽게 스크롤(속도 제어)
+  function scrollBottom(){
+    setTimeout(function(){
+      var h=Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+      var target=Math.max(0, h-window.innerHeight);
+      var start=window.scrollY||window.pageYOffset||0, dist=target-start;
+      if(reduce || Math.abs(dist)<2){ window.scrollTo(0,target); return; }
+      var dur=Math.min(1000, Math.max(450, Math.abs(dist)*1.0)); // 네이티브보다 ~30% 느리게
+      var t0=null;
+      (function step(ts){ if(t0===null)t0=ts; var p=Math.min(1,(ts-t0)/dur); var e=1-Math.pow(1-p,3);
+        window.scrollTo(0, start+dist*e); if(p<1) requestAnimationFrame(step); })(performance.now());
+    }, 120);
+  }
 
   var SKY={
     morning:'linear-gradient(165deg,#E8923D,#C76B2E)',
