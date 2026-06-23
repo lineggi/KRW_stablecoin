@@ -110,6 +110,16 @@
   .vsBox.old .v{color:#5A332B} .vsBox.neu .v{color:#234A3C}
   .vsNote{font-size:11.5px;color:var(--ink-faint);margin-top:10px;line-height:1.55;text-wrap:pretty}
   .vsNote b{color:var(--ink-soft);font-weight:700}
+  .infoWrap{margin-top:8px}
+  .infoBtn{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);background:#fff;
+    border-radius:8px;padding:5px 10px;font-family:inherit;font-size:11px;font-weight:700;
+    color:var(--jade-deep);cursor:pointer;transition:.15s}
+  .infoBtn:hover{background:#F6FBF8;border-color:var(--jade)}
+  .infoBtn .ia{display:inline-block;transition:transform .2s;font-size:9px}
+  .infoPop{display:none;margin-top:8px;background:#F6F9F7;border:1px solid var(--line);border-radius:10px;
+    padding:11px 12px;font-size:11.5px;line-height:1.65;color:var(--ink-soft);text-wrap:pretty}
+  .infoWrap:hover .infoPop,.infoWrap.open .infoPop{display:block}
+  .infoWrap:hover .ia,.infoWrap.open .ia{transform:rotate(180deg)}
   @keyframes fade{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
 
   .act{width:100%;margin:16px 0 4px;border:none;border-radius:14px;padding:15px;font-family:inherit;
@@ -309,7 +319,8 @@
           happen:'쓰지 않고 두기만 해도 포인트(리워드)가 조금씩 쌓여요.',
           old:{k:'😕 지금 (통장)', v:'그냥 두면 이자가 거의 없어요'},
           neu:{k:'✅ 원화 스테이블코인', v:'가만히 두기만 해도 리워드가 쌓여요'},
-          note:'※ 리워드는 <b>발행 주체와 정책에 따라 달라져요.</b> 거래소가 페이백을 주듯, 보유자에게 리워드를 돌려주는 모델도 있어요 (예: USDG).', save:0}
+          note:'※ 리워드는 <b>발행 주체와 정책에 따라 달라져요.</b><br>거래소가 페이백을 주듯, 보유자에게 리워드를 돌려주는 모델도 있어요 (예: USDG).',
+          noteMore:'미국 규제상 직접적인 ‘이자’ 지급은 금지되지만, USDG 발행사(팍소스)가 이자 수익을 거래소와 공유하는 방식으로 우회합니다. 크라켄·OKX 같은 거래소들이 유저에게 이자가 아닌 ‘마케팅 보상(Rewards)·페이백’ 명목으로 혜택을 돌려줍니다.', save:0}
       ]
     },
 
@@ -356,7 +367,7 @@
 
     global:{
       label:'해외 송금·무역', icon:'🌏', chip:'해외 · 국경 너머',
-      walletLabel:'내 지갑 (해외에서도)', startBal:15000000, replayLabel:'다시 보내보기',
+      walletLabel:'내 지갑 (해외에서도)', startBal:20000000, replayLabel:'다시 보내보기',
       summaryTitle:'오늘, 국경을 넘은 원화 스테이블코인',
       scenes:[
         {time:'해외 송금', sky:'✈️', band:'glob', icon:'👨‍👩‍👧', title:'해외 가족에게 송금', delta:-1380000, act:'해외로 보내기', type:'fan',
@@ -375,8 +386,8 @@
           happen:'은행 해외송금은 2~3일 걸리지만, 이건 1분 안에 도착하고 수수료도 아주 적어요.',
           old:{k:'😕 지금 (해외송금)', v:'2~3일 걸리고 · 수수료가 약 45,000원이나 들어요'},
           neu:{k:'✅ 원화 스테이블코인', v:'1분 안에 도착 · 수수료는 약 2,000원'}, save:43000},
-        {time:'무역 결제', sky:'🚢', band:'glob', icon:'📑', title:'수입 대금 결제', delta:-13800000, act:'안전 잠금으로 결제',
-          ctx:'해외 거래처에 수입 대금 1,380만 원어치($10,000)를 결제해요.',
+        {time:'무역 결제', sky:'🚢', band:'glob', icon:'📑', title:'수입 대금 결제', delta:-15300000, act:'안전 잠금으로 결제',
+          ctx:'해외 거래처에 수입 대금 $10,000을 결제해요. 1달러가 1,530원이면 약 1,530만 원이에요.',
           happen:'서류 확인을 조건으로 "안전 잠금함"에 돈을 넣어, 복잡하고 긴 무역 절차를 짧게 줄여요.',
           old:{k:'😕 지금 (신용장)', v:'서류가 오가고 수수료도 많고 며칠~몇 주 걸려요'},
           neu:{k:'✅ 원화 스테이블코인', v:'조건이 맞으면 자동 결제 · 비용과 시간을 아껴요'}, save:0},
@@ -537,10 +548,19 @@
       + '<div class="vsBox neu"><div class="k">'+sc.neu.k+'</div><div class="v">'+sc.neu.v+'</div></div></div>';
   }
   function diffBlock(sc){    var label = (sc.vsTitle!==undefined) ? sc.vsTitle : '💡 지금이랑 뭐가 다를까?';
+    var noteHtml='';
+    if(sc.note){
+      noteHtml='<div class="vsNote">'+brk(sc.note);
+      if(sc.noteMore){
+        noteHtml+='<div class="infoWrap"><button type="button" class="infoBtn">자세히 <span class="ia">▾</span></button>'
+          +'<div class="infoPop">'+brk(sc.noteMore)+'</div></div>';
+      }
+      noteHtml+='</div>';
+    }
     return '<div class="happen">'+brk(sc.happen)+'</div>'
       + (label ? '<div class="vsLabel">'+label+'</div>' : '')
       + vsCards(sc)
-      + (sc.note ? '<div class="vsNote">'+brk(sc.note)+'</div>' : '');
+      + noteHtml;
   }
   function qrStage(sc){
     var pat=[1,1,1,0,1,1,1, 1,0,1,0,1,0,1, 1,1,1,0,1,1,1, 0,0,0,1,0,0,0, 1,1,0,0,1,0,1, 0,0,1,1,0,1,0, 1,0,1,0,1,0,1];
@@ -614,6 +634,7 @@
       + '<button class="'+actClass+'" id="act">'+actLabel+'</button></div>';
     $('act').addEventListener('click',onAct);
     var rb=$('revealBtn'); if(rb) rb.addEventListener('click',toggleBackend);
+    var ib=document.querySelector('.infoBtn'); if(ib) ib.addEventListener('click',function(){ ib.parentNode.classList.toggle('open'); });
   }
 
   function toggleBackend(){
@@ -692,7 +713,7 @@
     setTop('summary'); $('time').textContent='완료'; $('sky').textContent='✨';
     st.i=curScenes().length; renderProgress();
     if(m.infoMode){ showInfoSummary(m); return; }
-    var rew=Math.max(st.reward, 14);
+    var rew=Math.max(0, Math.round(st.bal*0.04/365)); // 연 4% 기준 일일 리워드
     var txCount=st.pays+st.recvCount;
     var savedTxt = st.saved>0 ? '₩'+fmt(st.saved) : '수수료·시간';
     var monthTxt = st.mode==='personal'
