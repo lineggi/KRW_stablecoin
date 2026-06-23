@@ -479,18 +479,41 @@
           ctx:'한국은행 같은 나라가 만드는 디지털 돈(CBDC)과는 뭐가 다를까요?',
           happen:'나라가 만든 디지털 돈과 회사가 만든 원화 스테이블코인은 서로 싸우는 게 아니라, 함께 쓰일 수 있어요.',
           old:{k:'🏛️ 나라가 만든 돈 (CBDC)', v:'중앙은행이 직접 만들어요 · 공공의 기본 돈'},
-          neu:{k:'🏢 회사가 만든 원화 스테이블코인', v:'빠르고 다양한 서비스 · 정해진 규칙 안에서 함께 사용'}},
-        {time:'궁금증 ⑤', sky:'🌐', band:'glob', icon:'🌍', title:'나라마다 어떻게 다를까?', type:'info',
-          ctx:'싱가포르·일본·미국은 스테이블코인을 어떻게 다루고 있을까요?',
+          neu:{k:'🏢 회사가 만든 원화 스테이블코인', v:'빠르고 다양한 서비스 · 정해진 규칙 안에서 함께 사용'}}
+      ]
+    },
+
+    countries:{
+      label:'국가별 스테이블코인', icon:'🌍', chip:'해외 · 비교', infoMode:true,
+      walletLabel:'국가별 스테이블코인 규제', tagline:'싱가포르 · 일본 · 미국은 어떻게?',
+      startBal:0, replayLabel:'다시 보기',
+      summaryTitle:'나라마다 다르지만, 방향은 같아요',
+      summaryCards:[['🇸🇬','싱가포르'],['🇯🇵','일본'],['🇺🇸','미국'],['공통','준비자산·감독']],
+      summaryNote:'세 나라 모두 ① 준비자산을 1:1로 갖추고 ② 감독 아래에서 발행하도록 합니다. 한국도 가상자산이용자보호법 등으로 같은 방향을 준비하고 있어요.',
+      scenes:[
+        {time:'한눈에 비교', sky:'🌐', band:'glob', icon:'🌍', title:'국가별 스테이블코인', type:'info',
+          ctx:'싱가포르·일본·미국은 스테이블코인을 어떻게 다룰까요?',
           happen:'나라마다 규칙은 조금씩 다르지만 방향은 비슷해요. 준비자산을 갖추고, 감독 아래에서 발행하기.',
-          table:{
-            head:['나라','핵심 제도','특징'],
+          tableOpen:true, tableBtn:'나라별 비교 다시 보기',
+          table:{ head:['나라','핵심 제도','특징'],
             rows:[
               ['🇸🇬 싱가포르','MAS 규제안 (2023)','1:1 준비자산·상환 보장 · 명확한 라이선스로 친화적'],
               ['🇯🇵 일본','개정 자금결제법 (2023)','은행·신탁·송금업자만 발행 가능 · 비교적 엄격'],
-              ['🇺🇸 미국','GENIUS Act (2025)','1:1 준비자산·감독 의무 · 보유자에 대한 이자 지급은 제한']
-            ]
-          }}
+              ['🇺🇸 미국','GENIUS Act (2025)','1:1 준비자산·감독 의무 · 보유자 이자 지급은 제한']
+            ] }},
+        {time:'발행 주체', sky:'🏦', band:'glob', icon:'🏛️', title:'누가 발행할 수 있나', type:'info',
+          ctx:'나라마다 "누가 만들 수 있는지"가 달라요.',
+          happen:'발행 자격을 어디까지 여느냐가 나라별 색깔을 가르는 핵심이에요.',
+          tableOpen:true, tableBtn:'발행 주체 다시 보기',
+          table:{ head:['나라','발행 주체','한 줄 요약'],
+            rows:[
+              ['🇸🇬 싱가포르','MAS 인가 기관','규제 명확 → 글로벌 허브 지향'],
+              ['🇯🇵 일본','은행·신탁·자금이동업자','자격 제한 강함 → 안정성 우선'],
+              ['🇺🇸 미국','인가 발행사(은행·비은행)','연방 차원 규율 본격화']
+            ] }},
+        {time:'그래서 한국은?', sky:'🇰🇷', band:'biz', icon:'🇰🇷', title:'그래서 한국은?', type:'info',
+          ctx:'해외 흐름을 보면 한국의 방향도 보여요.',
+          happen:'한국도 같은 방향이에요. 준비자산·이용자 보호·감독을 갖춘 제도 위에서 원화 스테이블코인을 준비하고 있어요.'}
       ]
     }
   };
@@ -514,8 +537,10 @@
         desc:'가게 매출·직원 월급·납품 대금까지, 사업자의 돈 흐름이 어떻게 빨라지는지'},
       {key:'global', cls:'glob', tags:['해외 송금','무역 결제','환율 고정','해외 운용'],
         desc:'해외로 보내는 돈과 무역 대금을, 며칠이 아니라 1분 만에'},
-      {key:'regulation', cls:'reg', tags:['누가 만드나','1코인=1원','내 돈 보호','CBDC와 비교','나라별 규제'],
-        desc:'정말 안전할까? 누가 만들고, 진짜 1원으로 바꿀 수 있는지 + 나라별 규제까지'}
+      {key:'regulation', cls:'reg', tags:['누가 만드나','1코인=1원','내 돈 보호','CBDC와 비교'],
+        desc:'정말 안전할까? 누가 만들고, 진짜 1원으로 바꿀 수 있는지 알아봐요'},
+      {key:'countries', cls:'glob', tags:['싱가포르','일본','미국','발행 주체','한국 방향'],
+        desc:'싱가포르·일본·미국의 스테이블코인 제도를 표로 비교해요'}
     ];
     var html='<div class="hub">';
     cards.forEach(function(c){
@@ -676,15 +701,16 @@
         + (hasBackend?'<button class="reveal" id="revealBtn">뒤에서 어떻게 되는지 보기 ▾</button>'+backendHTML(sc):'');
     } else if(sc.type==='info'){
       actClass='act next'; actLabel=nextLabel();
+      var body='<div class="happen happenTop">'+brk(sc.happen)+'</div>';
       if(sc.table){
-        inner = '<div class="happen happenTop">'+brk(sc.happen)+'</div>'
-          + '<button class="reveal on" id="tableBtn">각 나라 스테이블코인 비교 보기 ▾</button>'
-          + '<div class="ctable" id="ctable">'+tableHTML(sc.table)+'</div>';
-      } else {
-        inner = '<div class="happen happenTop">'+brk(sc.happen)+'</div>'
-          + '<div class="topVs">'+vsCards(sc)+'</div>'
+        var topen=!!sc.tableOpen, blbl=(sc.tableBtn||'각 나라 스테이블코인 비교 보기');
+        body += '<button class="reveal on" id="tableBtn" data-label="'+blbl+'">'+(topen?'표 접기 ▴':blbl+' ▾')+'</button>'
+          + '<div class="ctable'+(topen?' show':'')+'" id="ctable">'+tableHTML(sc.table)+'</div>';
+      } else if(sc.old){
+        body += '<div class="topVs">'+vsCards(sc)+'</div>'
           + (hasBackend?'<button class="reveal on" id="revealBtn">어떻게 그렇게 되는지 보기 ▾</button>'+backendHTML(sc):'');
       }
+      inner = body;
     } else {
       var amtTxt = sc.delta>0?('+'+fmt(sc.delta)):(sc.delta<0?('−'+fmt(-sc.delta)):'');
       var amtColor = sc.delta>0?'var(--jade-deep)':'var(--con)';
@@ -700,7 +726,7 @@
     $('act').addEventListener('click',onAct);
     var rb=$('revealBtn'); if(rb) rb.addEventListener('click',toggleBackend);
     var ib=document.querySelector('.infoBtn'); if(ib) ib.addEventListener('click',function(){ ib.parentNode.classList.toggle('open'); });
-    var tb=$('tableBtn'); if(tb) tb.addEventListener('click',function(){ var c=$('ctable'); var open=c.classList.toggle('show'); tb.textContent=open?'표 접기 ▴':'각 나라 스테이블코인 비교 보기 ▾'; });
+    var tb=$('tableBtn'); if(tb) tb.addEventListener('click',function(){ var c=$('ctable'); var open=c.classList.toggle('show'); tb.textContent=open?'표 접기 ▴':(tb.getAttribute('data-label')+' ▾'); });
   }
 
   function toggleBackend(){
@@ -820,16 +846,13 @@
   function scard(k,v,j){ return '<div class="scard"><div class="k">'+k+'</div><div class="v'+(j?' j':'')+'">'+v+'</div></div>'; }
 
   function showInfoSummary(m){
+    var cards = m.summaryCards || [['누가 만드나','허가받은 곳'],['1코인의 가치','진짜 1원'],['내 돈 보호','법·보험'],['나라 돈과','함께 사용']];
+    var note = m.summaryNote || '원화 스테이블코인이 진짜 "돈"이 되려면, 빠르고 편한 것만으로는 부족해요. ① 허가받은 곳이 만들고 ② 1코인마다 진짜 1원을 보관하고 ③ 사고가 나도 법과 보험으로 지켜주고 ④ 나라가 만든 돈과도 잘 어울려야 해요. <b>편리함과 믿음은 함께 가야</b> 진짜 돈이 됩니다.';
     $('stage').innerHTML =
       '<div class="sum">'
       + '<h2>'+m.summaryTitle+'</h2>'
-      + '<div class="grid">'
-        + scard('누가 만드나', '허가받은 곳', true)
-        + scard('1코인의 가치', '진짜 1원', true)
-        + scard('내 돈 보호', '법·보험', true)
-        + scard('나라 돈과', '함께 사용', true)
-      + '</div>'
-      + '<div class="sumNote">'+brk('원화 스테이블코인이 진짜 "돈"이 되려면, 빠르고 편한 것만으로는 부족해요. ① 허가받은 곳이 만들고 ② 1코인마다 진짜 1원을 보관하고 ③ 사고가 나도 법과 보험으로 지켜주고 ④ 나라가 만든 돈과도 잘 어울려야 해요. <b>편리함과 믿음은 함께 가야</b> 진짜 돈이 됩니다.')+'</div>'
+      + '<div class="grid">'+cards.map(function(c){return scard(c[0],c[1],true);}).join('')+'</div>'
+      + '<div class="sumNote">'+brk(note)+'</div>'
       + '<div class="sumBtns">'
         + '<button class="act next" id="toHub2">다른 모드 보기</button>'
         + '<button class="act" id="replay">'+m.replayLabel+'</button>'
