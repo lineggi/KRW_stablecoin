@@ -277,7 +277,7 @@
   var $=function(id){return document.getElementById(id);};
   var fmt=function(n){return Math.round(n).toLocaleString('ko-KR');};
   // 문장이 끝나는 곳(. ? !)에서 줄바꿈 — 숫자의 쉼표는 건드리지 않음
-  var brk=function(t){return (t==null)?'':String(t).replace(/([.?!])\s+/g,'$1<br>');};
+  var brk=function(t){ if(t==null) return ''; t=String(t); if(t.indexOf('<br>')>=0) return t; return t.replace(/([.?!])\s+/g,'$1<br>'); };
 
   var SKY={
     morning:'linear-gradient(165deg,#E8923D,#C76B2E)',
@@ -430,7 +430,7 @@
       summaryTitle:'믿을 수 있어야 진짜 돈이 돼요',
       scenes:[
         {time:'궁금증 ①', sky:'🏦', band:'biz', icon:'🏛️', title:'이 돈은 누가 만들까?', type:'info',
-          ctx:'원화 스테이블코인은 누가 만들까요? 은행? 아니면 큰 회사?',
+          ctx:'원화 스테이블코인은 누가 만들까요?<br>은행? 아니면 큰 회사?',
           happen:'중요한 건 "누가 만드냐"보다, 진짜 돈으로 바꿔주는 약속과 이를 지켜보는 감시가 있느냐예요.',
           old:{k:'⚠️ 걱정', v:'아무나 만들면 안전할까요? 돈 관리가 어려워질 수 있어요'},
           neu:{k:'✅ 이렇게 만들어요', v:'허가받은 곳만 만들고, 진짜 돈은 따로 안전하게 보관해요'},
