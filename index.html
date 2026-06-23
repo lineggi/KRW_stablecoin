@@ -361,9 +361,9 @@
           happen:'정해진 날에 딱 맞춰 자동으로 빠져나가요. 한 달에 얼마까지만 낼지 내가 정할 수도 있어요.',
           old:{k:'😕 지금 (카드)', v:'카드가 만료되면 결제가 갑자기 끊기기도 해요'},
           neu:{k:'✅ 원화 스테이블코인', v:'지갑에서 자동으로, 영수증도 깔끔하게'}, save:0},
-        {time:'밤 11:00', sky:'🌙', band:'night', icon:'🌙', title:'밤, 남은 잔액', delta:0, earn:true, act:'리워드 켜기',
+        {time:'밤 11:00', sky:'🌙', band:'night', icon:'🌙', title:'밤, 남은 잔액', delta:78, earn:true, act:'리워드 켜기',
           ctx:'오늘 안 쓰고 남은 돈. 그냥 지갑에 둘게요.',
-          happen:'쓰지 않고 두기만 해도 포인트(리워드)가 조금씩 쌓여요.',
+          happen:'켜자마자 리워드가 +78원! 쓰지 않고 두기만 해도 조금씩 쌓여요.',
           old:{k:'😕 지금 (통장)', v:'그냥 두면 이자가 거의 없어요'},
           neu:{k:'✅ 원화 스테이블코인', v:'가만히 두기만 해도 리워드가 쌓여요'},
           note:'※ 리워드는 <b>발행 주체와 정책에 따라 달라져요.</b><br>거래소가 페이백을 주듯, 보유자에게 리워드를 돌려주는 모델도 있어요 (예: USDG).',
@@ -771,7 +771,7 @@
   function nextLabel(){ return (st.i<curScenes().length-1)?'다음 →':'결과 보기'; }
 
   function applyDelta(sc){
-    if(sc.delta!==0){ animateBal(st.bal+sc.delta); if(sc.delta<0)st.pays++; else if(sc.delta>0)st.recvCount++; }
+    if(sc.delta!==0){ animateBal(st.bal+sc.delta); if(sc.delta<0)st.pays++; else if(sc.delta>0 && !sc.earn)st.recvCount++; }
   }
   function startEarn(sc){
     var rate=sc.earnRate||0.02;
