@@ -190,9 +190,19 @@
     width:36px;height:36px;border-radius:50%;background:linear-gradient(160deg,#13B07B,#0A6E4C);
     color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;
     box-shadow:0 6px 16px -5px rgba(10,110,76,.85);transition:opacity .3s}
-  .xferStage.go .xCoin{animation:xfly 1.4s cubic-bezier(.45,0,.55,1) forwards}
+  .xferStage.go .xCoin{animation:xfly 1.4s linear forwards}
   .xferStage.done .xCoin{opacity:0}
-  @keyframes xfly{0%{left:23%;top:50%}50%{left:50%;top:20%}100%{left:77%;top:50%}}
+  @keyframes xfly{
+    0%{left:23%;top:50%}
+    12.5%{left:29.8%;top:38.2%}
+    25%{left:36.5%;top:29.8%}
+    37.5%{left:43.3%;top:24.7%}
+    50%{left:50%;top:23%}
+    62.5%{left:56.8%;top:24.7%}
+    75%{left:63.5%;top:29.8%}
+    87.5%{left:70.3%;top:38.2%}
+    100%{left:77%;top:50%}
+  }
 
   .backend{margin-top:6px;display:none}
   .backend.show{display:block;animation:fade .4s ease}
