@@ -166,6 +166,26 @@
     transform:scale(0);transition:transform .3s}
   .fanStage.done .fanRecv{transform:scale(1)}
 
+  /* 두 박스 사이 송금(트랜스퍼) 장면 */
+  .xferStage{height:118px;margin:14px 0 4px;position:relative;display:flex;align-items:center;
+    justify-content:space-between;padding:0 8px}
+  .xLine{position:absolute;left:50%;top:16px;bottom:16px;border-left:2px dashed var(--line);transform:translateX(-50%)}
+  .xLabel{position:absolute;top:8px;left:50%;transform:translateX(-50%);z-index:3;font-size:9.5px;font-weight:700;
+    color:var(--ink-faint);background:var(--card);padding:0 7px}
+  .xBox{width:86px;height:86px;border-radius:16px;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:6px;border:1.5px solid var(--line);background:#fff;z-index:2;
+    box-shadow:0 6px 14px -10px rgba(17,32,28,.4)}
+  .xBox .xe{font-size:28px;line-height:1}
+  .xBox .xl{font-size:10.5px;font-weight:700;color:var(--ink-soft)}
+  .xBox.recv{transition:transform .35s,border-color .35s,background .35s}
+  .xferStage.done .xBox.recv{transform:scale(1.07);border-color:var(--jade);background:var(--jade-tint)}
+  .xCoin{position:absolute;top:50%;left:23%;transform:translate(-50%,-50%);z-index:3;
+    width:36px;height:36px;border-radius:50%;background:linear-gradient(160deg,#13B07B,#0A6E4C);
+    color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;
+    box-shadow:0 6px 16px -5px rgba(10,110,76,.85);transition:left .9s cubic-bezier(.4,0,.2,1),opacity .3s}
+  .xferStage.go .xCoin{left:77%}
+  .xferStage.done .xCoin{opacity:0}
+
   .backend{margin-top:6px;display:none}
   .backend.show{display:block;animation:fade .4s ease}
   .bHead{font-size:10.5px;font-weight:800;letter-spacing:.06em;color:var(--ink-faint);
@@ -366,8 +386,8 @@
       walletLabel:'내 지갑 (해외에서도)', startBal:20000000, replayLabel:'다시 보내보기',
       summaryTitle:'오늘, 국경을 넘은 원화 스테이블코인',
       scenes:[
-        {time:'해외 송금', sky:'✈️', band:'glob', icon:'👨‍👩‍👧', title:'해외 가족에게 송금', delta:-1380000, act:'해외로 보내기', type:'fan',
-          fanCount:6, fanTop:'✈️', fanLabel:'국경 너머로',
+        {time:'해외 송금', sky:'✈️', band:'glob', icon:'👨‍👩‍👧', title:'해외 가족에게 송금', delta:-1380000, act:'해외로 보내기', type:'xfer',
+          fromIcon:'🧑', fromLabel:'나 (한국)', toIcon:'👨‍👩‍👧', toLabel:'가족 (해외)', xferLabel:'✈️ 국경 너머',
           ctx:'외국에 사는 가족에게 생활비 138만 원을 보내요.',
           phases:[
             {h:'1단계 · 보내기 (앱 안에서 끝)', steps:[
@@ -558,6 +578,15 @@
       + vsCards(sc)
       + noteHtml;
   }
+  function xferStage(sc){
+    return '<div class="xferStage" id="xferStage">'
+      + '<div class="xLabel">'+(sc.xferLabel||'✈️ 국경 너머')+'</div>'
+      + '<div class="xLine"></div>'
+      + '<div class="xBox"><span class="xe">'+(sc.fromIcon||'🧑')+'</span><span class="xl">'+(sc.fromLabel||'나')+'</span></div>'
+      + '<div class="xCoin" id="xCoin">₩</div>'
+      + '<div class="xBox recv"><span class="xe">'+(sc.toIcon||'👨‍👩‍👧')+'</span><span class="xl">'+(sc.toLabel||'받는 사람')+'</span></div>'
+      + '</div>';
+  }
   function qrStage(sc){
     var pat=[1,1,1,0,1,1,1, 1,0,1,0,1,0,1, 1,1,1,0,1,1,1, 0,0,0,1,0,0,0, 1,1,0,0,1,0,1, 0,0,1,1,0,1,0, 1,0,1,0,1,0,1];
     var cells=pat.map(function(v){return '<i class="'+(v?'on':'')+'"></i>';}).join('');
@@ -609,6 +638,10 @@
         + (hasBackend?'<button class="reveal" id="revealBtn">뒤에서 어떻게 되는지 보기 ▾</button>'+backendHTML(sc):'');
     } else if(sc.type==='fan'){
       inner = fanStage(sc)
+        + '<div class="benefit" id="benefit">'+diffBlock(sc)+'</div>'
+        + (hasBackend?'<button class="reveal" id="revealBtn">뒤에서 어떻게 되는지 보기 ▾</button>'+backendHTML(sc):'');
+    } else if(sc.type==='xfer'){
+      inner = xferStage(sc)
         + '<div class="benefit" id="benefit">'+diffBlock(sc)+'</div>'
         + (hasBackend?'<button class="reveal" id="revealBtn">뒤에서 어떻게 되는지 보기 ▾</button>'+backendHTML(sc):'');
     } else if(sc.type==='info'){
@@ -684,6 +717,12 @@
         setTimeout(function(){ fs.classList.add('done'); },500);
         setTimeout(function(){ applyDelta(sc); },650);
         setTimeout(function(){ afterAnimated(sc); },1150);
+      } else if(sc.type==='xfer'){
+        st.animating=true;
+        var xs=$('xferStage'); xs.classList.add('go');
+        setTimeout(function(){ xs.classList.add('done'); },900);
+        setTimeout(function(){ applyDelta(sc); },950);
+        setTimeout(function(){ afterAnimated(sc); },1300);
       } else {
         st.animating=true;
         var eff=$('effect'); if(eff) eff.classList.add('go');
