@@ -108,6 +108,8 @@
   .vsBox.old .k{color:var(--con)} .vsBox.neu .k{color:var(--jade-deep)}
   .vsBox .v{font-size:13px;margin-top:5px;line-height:1.5;font-weight:600;text-wrap:pretty}
   .vsBox.old .v{color:#5A332B} .vsBox.neu .v{color:#234A3C}
+  .vsNote{font-size:11.5px;color:var(--ink-faint);margin-top:10px;line-height:1.55;text-wrap:pretty}
+  .vsNote b{color:var(--ink-soft);font-weight:700}
   @keyframes fade{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
 
   .act{width:100%;margin:16px 0 4px;border:none;border-radius:14px;padding:15px;font-family:inherit;
@@ -306,7 +308,8 @@
           ctx:'오늘 안 쓰고 남은 돈. 그냥 지갑에 둘게요.',
           happen:'쓰지 않고 두기만 해도 포인트(리워드)가 조금씩 쌓여요.',
           old:{k:'😕 지금 (통장)', v:'그냥 두면 이자가 거의 없어요'},
-          neu:{k:'✅ 원화 스테이블코인', v:'가만히 두기만 해도 리워드가 쌓여요'}, save:0}
+          neu:{k:'✅ 원화 스테이블코인', v:'가만히 두기만 해도 리워드가 쌓여요'},
+          note:'※ 리워드는 <b>발행 주체와 정책에 따라 달라져요.</b> 거래소가 페이백을 주듯, 보유자에게 리워드를 돌려주는 모델도 있어요 (예: USDG).', save:0}
       ]
     },
 
@@ -536,7 +539,8 @@
   function diffBlock(sc){    var label = (sc.vsTitle!==undefined) ? sc.vsTitle : '💡 지금이랑 뭐가 다를까?';
     return '<div class="happen">'+brk(sc.happen)+'</div>'
       + (label ? '<div class="vsLabel">'+label+'</div>' : '')
-      + vsCards(sc);
+      + vsCards(sc)
+      + (sc.note ? '<div class="vsNote">'+brk(sc.note)+'</div>' : '');
   }
   function qrStage(sc){
     var pat=[1,1,1,0,1,1,1, 1,0,1,0,1,0,1, 1,1,1,0,1,1,1, 0,0,0,1,0,0,0, 1,1,0,0,1,0,1, 0,0,1,1,0,1,0, 1,0,1,0,1,0,1];
