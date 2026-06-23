@@ -302,7 +302,7 @@
       var target=Math.max(0, h-window.innerHeight);
       var start=window.scrollY||window.pageYOffset||0, dist=target-start;
       if(reduce || Math.abs(dist)<2){ window.scrollTo(0,target); return; }
-      var dur=Math.min(1000, Math.max(450, Math.abs(dist)*1.0)); // 네이티브보다 ~30% 느리게
+      var dur=Math.min(1500, Math.max(675, Math.abs(dist)*1.5)); // 더 느리게(약 50%)
       var t0=null;
       (function step(ts){ if(t0===null)t0=ts; var p=Math.min(1,(ts-t0)/dur); var e=1-Math.pow(1-p,3);
         window.scrollTo(0, start+dist*e); if(p<1) requestAnimationFrame(step); })(performance.now());
