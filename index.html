@@ -110,16 +110,12 @@
   .vsBox.old .v{color:#5A332B} .vsBox.neu .v{color:#234A3C}
   .vsNote{font-size:11.5px;color:var(--ink-faint);margin-top:10px;line-height:1.55;text-wrap:pretty}
   .vsNote b{color:var(--ink-soft);font-weight:700}
-  .infoWrap{margin-top:8px}
-  .infoBtn{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);background:#fff;
-    border-radius:8px;padding:5px 10px;font-family:inherit;font-size:11px;font-weight:700;
-    color:var(--jade-deep);cursor:pointer;transition:.15s}
-  .infoBtn:hover{background:#F6FBF8;border-color:var(--jade)}
-  .infoBtn .ia{display:inline-block;transition:transform .2s;font-size:9px}
+  .infoBtn{border:none;background:none;padding:0;margin-left:3px;font-family:inherit;font-size:11.5px;
+    font-weight:700;color:var(--jade-deep);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+  .infoBtn:hover{color:var(--jade)}
   .infoPop{display:none;margin-top:8px;background:#F6F9F7;border:1px solid var(--line);border-radius:10px;
     padding:11px 12px;font-size:11.5px;line-height:1.65;color:var(--ink-soft);text-wrap:pretty}
   .infoWrap:hover .infoPop,.infoWrap.open .infoPop{display:block}
-  .infoWrap:hover .ia,.infoWrap.open .ia{transform:rotate(180deg)}
   @keyframes fade{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
 
   .act{width:100%;margin:16px 0 4px;border:none;border-radius:14px;padding:15px;font-family:inherit;
@@ -552,8 +548,8 @@
     if(sc.note){
       noteHtml='<div class="vsNote">'+brk(sc.note);
       if(sc.noteMore){
-        noteHtml+='<div class="infoWrap"><button type="button" class="infoBtn">자세히 <span class="ia">▾</span></button>'
-          +'<div class="infoPop">'+brk(sc.noteMore)+'</div></div>';
+        noteHtml+=' <span class="infoWrap"><button type="button" class="infoBtn">(자세히)</button>'
+          +'<span class="infoPop">'+brk(sc.noteMore)+'</span></span>';
       }
       noteHtml+='</div>';
     }
