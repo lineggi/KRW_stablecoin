@@ -116,6 +116,13 @@
   .infoPop{display:none;margin-top:8px;background:#F6F9F7;border:1px solid var(--line);border-radius:10px;
     padding:11px 12px;font-size:11.5px;line-height:1.65;color:var(--ink-soft);text-wrap:pretty}
   .infoWrap:hover .infoPop,.infoWrap.open .infoPop{display:block}
+  .ctable{display:none;margin-top:12px}
+  .ctable.show{display:block;animation:fade .4s ease}
+  table.cmp{width:100%;border-collapse:collapse;font-size:11.5px;line-height:1.45}
+  table.cmp th,table.cmp td{border:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+  table.cmp thead th{background:var(--jade-tint);color:var(--jade-deep);font-weight:800;font-size:11px;text-align:center}
+  table.cmp tbody th{background:#F6F9F7;font-weight:800;font-size:11.5px;white-space:nowrap}
+  table.cmp td{color:var(--ink-soft);font-weight:600}
   @keyframes fade{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
 
   .act{width:100%;margin:16px 0 4px;border:none;border-radius:14px;padding:15px;font-family:inherit;
@@ -472,7 +479,18 @@
           ctx:'한국은행 같은 나라가 만드는 디지털 돈(CBDC)과는 뭐가 다를까요?',
           happen:'나라가 만든 디지털 돈과 회사가 만든 원화 스테이블코인은 서로 싸우는 게 아니라, 함께 쓰일 수 있어요.',
           old:{k:'🏛️ 나라가 만든 돈 (CBDC)', v:'중앙은행이 직접 만들어요 · 공공의 기본 돈'},
-          neu:{k:'🏢 회사가 만든 원화 스테이블코인', v:'빠르고 다양한 서비스 · 정해진 규칙 안에서 함께 사용'}}
+          neu:{k:'🏢 회사가 만든 원화 스테이블코인', v:'빠르고 다양한 서비스 · 정해진 규칙 안에서 함께 사용'}},
+        {time:'궁금증 ⑤', sky:'🌐', band:'glob', icon:'🌍', title:'나라마다 어떻게 다를까?', type:'info',
+          ctx:'싱가포르·일본·미국은 스테이블코인을 어떻게 다루고 있을까요?',
+          happen:'나라마다 규칙은 조금씩 다르지만 방향은 비슷해요. 준비자산을 갖추고, 감독 아래에서 발행하기.',
+          table:{
+            head:['나라','핵심 제도','특징'],
+            rows:[
+              ['🇸🇬 싱가포르','MAS 규제안 (2023)','1:1 준비자산·상환 보장 · 명확한 라이선스로 친화적'],
+              ['🇯🇵 일본','개정 자금결제법 (2023)','은행·신탁·송금업자만 발행 가능 · 비교적 엄격'],
+              ['🇺🇸 미국','GENIUS Act (2025)','1:1 준비자산·감독 의무 · 보유자에 대한 이자 지급은 제한']
+            ]
+          }}
       ]
     }
   };
@@ -628,6 +646,15 @@
     return '<div class="backend" id="backend"><div class="bHead">뒤에서 일어나는 일</div>'
       + '<div id="bSteps">'+blocks+'</div></div>';
   }
+  function tableHTML(t){
+    var h='<table class="cmp"><thead><tr>';
+    t.head.forEach(function(c){ h+='<th>'+c+'</th>'; });
+    h+='</tr></thead><tbody>';
+    t.rows.forEach(function(r){ h+='<tr>';
+      r.forEach(function(c,i){ var tag=i===0?'th':'td'; h+='<'+tag+'>'+c+'</'+tag+'>'; });
+      h+='</tr>'; });
+    return h+'</tbody></table>';
+  }
 
   function renderScene(){
     var sc=curScenes()[st.i]; st.acted=false; st.animating=false; st.backendShown=false;
@@ -649,9 +676,15 @@
         + (hasBackend?'<button class="reveal" id="revealBtn">뒤에서 어떻게 되는지 보기 ▾</button>'+backendHTML(sc):'');
     } else if(sc.type==='info'){
       actClass='act next'; actLabel=nextLabel();
-      inner = '<div class="happen happenTop">'+brk(sc.happen)+'</div>'
-        + '<div class="topVs">'+vsCards(sc)+'</div>'
-        + (hasBackend?'<button class="reveal on" id="revealBtn">어떻게 그렇게 되는지 보기 ▾</button>'+backendHTML(sc):'');
+      if(sc.table){
+        inner = '<div class="happen happenTop">'+brk(sc.happen)+'</div>'
+          + '<button class="reveal on" id="tableBtn">각 나라 스테이블코인 비교 보기 ▾</button>'
+          + '<div class="ctable" id="ctable">'+tableHTML(sc.table)+'</div>';
+      } else {
+        inner = '<div class="happen happenTop">'+brk(sc.happen)+'</div>'
+          + '<div class="topVs">'+vsCards(sc)+'</div>'
+          + (hasBackend?'<button class="reveal on" id="revealBtn">어떻게 그렇게 되는지 보기 ▾</button>'+backendHTML(sc):'');
+      }
     } else {
       var amtTxt = sc.delta>0?('+'+fmt(sc.delta)):(sc.delta<0?('−'+fmt(-sc.delta)):'');
       var amtColor = sc.delta>0?'var(--jade-deep)':'var(--con)';
@@ -667,6 +700,7 @@
     $('act').addEventListener('click',onAct);
     var rb=$('revealBtn'); if(rb) rb.addEventListener('click',toggleBackend);
     var ib=document.querySelector('.infoBtn'); if(ib) ib.addEventListener('click',function(){ ib.parentNode.classList.toggle('open'); });
+    var tb=$('tableBtn'); if(tb) tb.addEventListener('click',function(){ var c=$('ctable'); var open=c.classList.toggle('show'); tb.textContent=open?'표 접기 ▴':'각 나라 스테이블코인 비교 보기 ▾'; });
   }
 
   function toggleBackend(){
