@@ -295,8 +295,8 @@
   var fmt=function(n){return Math.round(n).toLocaleString('ko-KR');};
   // 문장이 끝나는 곳(. ? !)에서 줄바꿈 — 숫자의 쉼표는 건드리지 않음
   var brk=function(t){ if(t==null) return ''; t=String(t); if(t.indexOf('<br>')>=0) return t; return t.replace(/([.?!])\s+/g,'$1<br>'); };
-  // 새로 나타난 내용으로 부드럽게 스크롤
-  function smoothTo(el, block){ if(!el) return; setTimeout(function(){ try{ el.scrollIntoView({behavior:reduce?'auto':'smooth', block:block||'nearest'}); }catch(e){ try{el.scrollIntoView();}catch(_){} } }, 90); }
+  // 새로 나타난 내용을 보도록 페이지 맨 아래로 부드럽게 스크롤
+  function scrollBottom(){ setTimeout(function(){ var h=Math.max(document.documentElement.scrollHeight, document.body.scrollHeight); try{ window.scrollTo({top:h, behavior:reduce?'auto':'smooth'}); }catch(e){ window.scrollTo(0,h); } }, 120); }
 
   var SKY={
     morning:'linear-gradient(165deg,#E8923D,#C76B2E)',
@@ -737,8 +737,8 @@
       + '<button class="'+actClass+'" id="act">'+actLabel+'</button></div>';
     $('act').addEventListener('click',onAct);
     var rb=$('revealBtn'); if(rb) rb.addEventListener('click',toggleBackend);
-    var ib=document.querySelector('.infoBtn'); if(ib) ib.addEventListener('click',function(){ var op=ib.parentNode.classList.toggle('open'); if(op) smoothTo(ib.parentNode.querySelector('.infoPop'),'nearest'); });
-    var tb=$('tableBtn'); if(tb) tb.addEventListener('click',function(){ var c=$('ctable'); var open=c.classList.toggle('show'); tb.textContent=open?'표 접기 ▴':(tb.getAttribute('data-label')+' ▾'); if(open) smoothTo(c,'nearest'); });
+    var ib=document.querySelector('.infoBtn'); if(ib) ib.addEventListener('click',function(){ var op=ib.parentNode.classList.toggle('open'); if(op) scrollBottom(); });
+    var tb=$('tableBtn'); if(tb) tb.addEventListener('click',function(){ var c=$('ctable'); var open=c.classList.toggle('show'); tb.textContent=open?'표 접기 ▴':(tb.getAttribute('data-label')+' ▾'); if(open) scrollBottom(); });
   }
 
   function toggleBackend(){
@@ -750,7 +750,7 @@
       var steps=b.querySelectorAll('.bStep');
       steps.forEach(function(s,k){ setTimeout(function(){ s.classList.add('in'); }, k*200); });
     }
-    if(open) smoothTo(b,'nearest');
+    if(open) scrollBottom();
   }
 
   function advance(){
@@ -773,7 +773,7 @@
     $('benefit').classList.add('show');
     var btn=$('act'); btn.className='act next'; btn.textContent=nextLabel();
     st.animating=false;
-    smoothTo($('act'),'end');
+    scrollBottom();
   }
 
   function onAct(){
@@ -818,7 +818,7 @@
     var rb=$('revealBtn'); if(rb) rb.classList.add('on');
     var btn=$('act'); btn.className='act next'; btn.textContent=nextLabel();
     st.animating=false;
-    smoothTo($('act'),'end');
+    scrollBottom();
   }
 
   function showSummary(){
